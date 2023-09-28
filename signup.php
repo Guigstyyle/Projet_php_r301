@@ -45,10 +45,10 @@
                  name="password" 
                  placeholder="Password"><br>
 
-          <label>Re Password</label>
+          <label>Confirm Password</label>
           <input type="password" 
-                 name="re_password" 
-                 placeholder="Re_Password"><br>
+                 name="confirm password"
+                 placeholder="Confirm Password"><br>
 
      	<button type="submit">Sign Up</button>
           <a href="index.php" class="ca">Already have an account?</a>

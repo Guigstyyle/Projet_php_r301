@@ -60,22 +60,27 @@ button:hover {
     margin: 20px auto;
 }
 
+.success {
+   background: #D4EDDA;
+   color: #40754C;
+   padding: 10px;
+   width: 95%;
+   border-radius: 5px;
+   margin: 20px auto;
+}
+
 h1 {
     text-align: center;
     color: #fff;
 }
 
-a {
-    float: right;
-    background: #555;
-    padding: 10px 15px;
-    color: #fff;
-    border-radius: 5px;
-    margin-right: 10px;
-    border: none;
-    text-decoration: none;
-
+.ca {
+	font-size: 14px;
+	display: inline-block;
+	padding: 10px;
+	text-decoration: none;
+	color: #444;
 }
-a:hover {
-    opacity: .7;
-}
+.ca:hover {
+	text-decoration: underline;
+} 

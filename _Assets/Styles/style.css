@@ -19,7 +19,7 @@ menu {
     padding: 0;
 }
 
-/* Espace entre les éléments du menu */
+/* Espace et  entre les éléments du menu */
 menu li {
     display: inline;
     margin-right: 20px;

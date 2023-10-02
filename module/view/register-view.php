@@ -2,7 +2,8 @@
 <html>
 <head>
     <title>SIGN UP</title>
-    <link rel="stylesheet" type="text/css" href="_Assets/style/style.css">
+    <meta name="description" content="Ceci est la page de création de compte de notre site sous forme de mur social de type blog.">
+    <link rel="stylesheet" type="text/css" href="_Assets/Styles/style.css">
     <link rel="icon" type="favicon.ico" href="_Assets/Images/favicon.ico">
 </head>
 <body>

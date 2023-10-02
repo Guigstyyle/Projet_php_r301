@@ -3,6 +3,7 @@
 <head>
     <title> login </title>
     <link rel="stylesheet" type="text/css" href="_Assets/style/style.css">
+    <link rel="icon" type="favicon.ico" href="_Assets/Images/favicon.ico">
 </head>
 <body>
 <form action="../Controler/user/login-controler.php" method="post">

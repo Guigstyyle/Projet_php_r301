@@ -12,6 +12,25 @@ body {
     box-sizing: border-box;
 }
 
+/* Spécificités du menu */
+menu {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* Espace entre les éléments du menu */
+menu li {
+    display: inline;
+    margin-right: 20px;
+}
+
+/* Taille de l'espace à droite pour le dernier élément du menu */
+menu li:last-child {
+    margin-right: 0;
+}
+
+/* Spécificités du formulaire */
 form {
     width: 500px;
     border: 2px solid #ccc;

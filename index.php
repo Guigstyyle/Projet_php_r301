@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <title> login </title>
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="_Assets/style/style.css">
     <link rel="icon" type="favicon.ico" href="_Assets/Images/favicon.ico">
 </head>
 <body>

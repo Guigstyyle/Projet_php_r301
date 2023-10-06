@@ -8,12 +8,16 @@
 </head>
 <body>
     <!-- Menu permanent -->
-    <ul id="menu">
-        <li><a href="#">Accueil</a></li>
-        <li><a href="#">Catégories</a></li>
-        <li><a href="#">Services</a></li>
-        <li><a href="#">Contacts</a></li>
-    </ul>
+
+    <nav id="menu">
+        <ul>
+            <li><a href="#">Accueil</a></li>
+            <li><a href="#">Catégories</a></li>
+            <li><a href="#">Services</a></li>
+            <li><a href="#">Contacts</a></li>
+        </ul>
+    </nav>
+
     <!-- Formulaire du LOGIN -->
     <form action="login.php" method="post">
         <h2> LOGIN</h2>

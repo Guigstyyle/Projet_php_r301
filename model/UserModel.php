@@ -128,6 +128,7 @@ class UserModel
         $query->bindValue(':now', date('Y-m-d H:i:s'));
         $query->bindValue(':username', $this->username);
         $query->execute();
+        return true;
     }
 
     public static function verifyPassword($usernameOrMail, $password): bool

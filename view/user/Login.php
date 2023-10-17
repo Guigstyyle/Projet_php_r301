@@ -1,6 +1,7 @@
 <?php
 
-require_once __DIR__.'/../Layout.php';
+require_once __DIR__ . '/../Layout.php';
+
 class Login
 {
     public function setContent(): string
@@ -20,9 +21,10 @@ class Login
 </form>
 HTML;
     }
-    public function show():void
+
+    public function show(): void
     {
-        (new \Layout('Login',$this->setContent()))->show();
+        (new \Layout('Login', $this->setContent()))->show();
     }
 
 

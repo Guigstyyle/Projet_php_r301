@@ -1,6 +1,5 @@
 <?php
 
-
 require_once __DIR__ . '/../view/user/Login.php';
 require_once __DIR__ . '/../view/ErrorPage.php';
 require_once __DIR__ . '/../model/UserModel.php';
@@ -46,7 +45,6 @@ class LoginController
             (new ErrorPage())->show($exception->getMessage());
             return false;
         }
-        echo 'oui';
         return true;
 
     }

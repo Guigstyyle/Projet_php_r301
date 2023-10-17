@@ -9,6 +9,6 @@ class ErrorPage
 HTML;
     }
     public function show($error){
-        (new Layout('Erreur',$this->setContent($error)))->show();
+        (new Layout('Erreur :',$this->setContent($error)))->show();
     }
 }

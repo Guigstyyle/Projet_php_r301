@@ -1,10 +1,11 @@
 <?php
+require_once __DIR__ . '/../Layout.php';
 
-namespace view\user;
 class Register
 {
-public function serContent(){
-    return ?>
+    public function setContent(): string
+    {
+        return <<<HTML
 <form method="post" action="index.php">
     <label>
         Nom d'utilisateur* :<br>
@@ -26,7 +27,15 @@ public function serContent(){
         Mot de passe a nouveau* :<br>
         <input type="password" name="verifPassword" placeholder="Même mot de passe"><br>
     </label>
-
+    <button type="reset">Effacer</button>
+    <button type="submit" name="action" value="register">Créer le compte</button>
+    
 </form>
-}
+HTML;
+    }
+
+    public function show()
+    {
+        (new Layout('création de compte', $this->setContent()))->show();
+    }
 }

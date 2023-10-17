@@ -8,6 +8,7 @@ class Homepage
         <h1>Bienvenue !</h1>
         <form method="post" action="index.php">
             <button type="submit" name="action" value="toLogin">Login</button>
+            <button type="submit" name="action" value="toRegister">Créer un compte</button>
         </form>
 HTML;
     }

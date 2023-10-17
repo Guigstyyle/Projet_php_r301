@@ -12,12 +12,9 @@ class UserModel
     private $administrator;
     private $deactivated;
 
+
     /**
-     * @param $username
-     * @param $mail
-     * @param $password
-     * @description Constructor used on registration of a new user
-     * @todo same constructor but with frontname.
+     * @description Base constructor that calls the appropriate one
      */
     public function __construct()
     {
@@ -33,6 +30,13 @@ class UserModel
         }
     }
 
+    /**
+     * @param $usernameOrMail
+     * @param $password
+     * @return void
+     * @throws Exception
+     * @description Constructor used on Login.
+     */
     public function __construct2($usernameOrMail, $password)
     {
         $query = self::selectUsernameOrMail($usernameOrMail);
@@ -52,16 +56,30 @@ class UserModel
         }
     }
 
+    /**
+     * @param $username
+     * @param $mail
+     * @param $password
+     * @description Constructor used on registration of a new user when the frontname is not provided.
+     * frontname will have the value of username
+     */
     public function __construct3($username, $mail, $password)
     {
-        $this->attributeInitialisation($username, $mail, $password);
         $this->frontname = $username;
+        $this->attributeInitialisation($username, $mail, $password);
     }
 
+    /**
+     * @param $username
+     * @param $mail
+     * @param $password
+     * @param $frontname
+     * @description Constructor used on registration of a new user when frontname is provided
+     */
     public function __construct4($username, $mail, $password, $frontname)
     {
-        $this->attributeInitialisation($username, $mail, $password);
         $this->frontname = $frontname;
+        $this->attributeInitialisation($username, $mail, $password);
     }
 
     /**
@@ -113,6 +131,11 @@ class UserModel
         return false;
     }
 
+    /**
+     * @param $usernameOrMail
+     * @return false|PDOStatement
+     * @description Select the username or the email to use in $this->verifyPassword.
+     */
     public static function selectUsernameOrMail($usernameOrMail)
     {
         $pdo = DatabaseConnection::connect();
@@ -121,6 +144,10 @@ class UserModel
         return $query;
     }
 
+    /**
+     * @return void
+     * @description Update the last connection to the current date.
+     */
     public function updateLastConnection()
     {
         $pdo = DatabaseConnection::connect();
@@ -128,9 +155,14 @@ class UserModel
         $query->bindValue(':now', date('Y-m-d H:i:s'));
         $query->bindValue(':username', $this->username);
         $query->execute();
-        return true;
     }
 
+    /**
+     * @param $usernameOrMail
+     * @param $password
+     * @return bool
+     * @description Checks if $password is the correct password for the username $username.
+     */
     public static function verifyPassword($usernameOrMail, $password): bool
     {
         $query = self::selectUsernameOrMail($usernameOrMail);
@@ -138,37 +170,50 @@ class UserModel
             return false;
         }
         $result = $query->fetch(PDO::FETCH_ASSOC);
+        if (!$result) {
+            return $result;
+        }
         if ($password === $result['password']) {
             return true;
         }
         return false;
     }
 
+    /**
+     * @param $username
+     * @return bool
+     * @description Checks if the username exists in the database
+     */
     public static function usernameExists($username): bool
     {
         $pdo = DatabaseConnection::connect();
-        $query = $pdo->prepare('SELECT * FROM USER WHERE  username = :username');
+        $query = $pdo->prepare('SELECT username FROM USER WHERE username = :username');
         $query->bindValue(':username', $username);
 
+        $query->execute();
         $result = $query->fetch(PDO::FETCH_ASSOC);
-        if (empty($result)) {
+        if (empty($result['username'])) {
             return false;
         }
         return true;
     }
 
+    /**
+     * @param $mail
+     * @return bool
+     * @description Checks if the email address exists in the database
+     */
     public static function mailExists($mail): bool
     {
         $pdo = DatabaseConnection::connect();
         $query = $pdo->prepare('SELECT * FROM USER WHERE  mail = :mail');
         $query->bindValue(':mail', $mail);
 
+        $query->execute();
         $result = $query->fetch(PDO::FETCH_ASSOC);
-        if (empty($result)) {
+        if (empty($result['mail'])) {
             return false;
         }
         return true;
     }
-
-
 }

@@ -10,6 +10,7 @@ class LoginController
     {
         if ($_POST['action'] === 'login') {
             $this->connectUser();
+            echo 't\'es logged';
         }
         if ($_POST['action'] === 'toLogin') {
             (new Login())->show();

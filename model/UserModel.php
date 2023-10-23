@@ -30,6 +30,17 @@ class UserModel
         }
     }
 
+
+    /**
+     * @param $usernameOrMail
+     * @return void
+     * @throws Exception
+     * @description Used when updating the user in the database
+     */
+    public function __construct1($usernameOrMail)
+    {
+        $this->constructUserByUsername($usernameOrMail);
+    }
     /**
      * @param $usernameOrMail
      * @param $password
@@ -39,21 +50,7 @@ class UserModel
      */
     public function __construct2($usernameOrMail, $password)
     {
-        $query = self::selectUsernameOrMail($usernameOrMail);
-
-        if (!$query->execute()) {
-            throw new Exception('Non valid query');
-        } else {
-            $result = $query->fetch(PDO::FETCH_ASSOC);
-            $this->username = $result['username'];
-            $this->mail = $result['mail'];
-            $this->password = $result['password'];
-            $this->frontname = $result['frontname'];
-            $this->firsconnection = $result['firstconnection'];
-            $this->lasconnection = date('Y-m-d H:i:s');
-            $this->administrator = $result['administrator'];
-            $this->deactivated = $result['deactivated'];
-        }
+        $this->constructUserByUsername($usernameOrMail);
     }
 
     /**
@@ -102,6 +99,31 @@ class UserModel
     }
 
     /**
+     * @param $usernameOrMail
+     * @return void
+     * @throws Exception
+     * @description set the attribute by using the username in a database request
+     */
+    public function constructUserByUsername($usernameOrMail): void
+    {
+        $query = self::selectUsernameOrMail($usernameOrMail);
+
+        if (!$query->execute()) {
+            throw new Exception('Non valid query');
+        } else {
+            $result = $query->fetch(PDO::FETCH_ASSOC);
+            $this->username = $result['username'];
+            $this->mail = $result['mail'];
+            $this->password = $result['password'];
+            $this->frontname = $result['frontname'];
+            $this->firsconnection = $result['firstconnection'];
+            $this->lasconnection = date('Y-m-d H:i:s');
+            $this->administrator = $result['administrator'];
+            $this->deactivated = $result['deactivated'];
+        }
+    }
+
+    /**
      * @return bool
      * @description registers a new user to the database
      */
@@ -129,6 +151,44 @@ class UserModel
             return true;
         }
         return false;
+    }
+
+    /**
+     * @return bool
+     * @description Change the privilege of the user an update the database
+     */
+    public function changeAdminState(): bool
+    {
+        $pdo = DatabaseConnection::connect();
+        $query = $pdo->prepare('UPDATE USER SET administrator = :administrator WHERE username = :username');
+        if ($this->administrator){
+            $this->administrator = 0;
+        }
+        else{
+            $this->administrator = 1;
+        }
+        $query->bindValue(':username',$this->username);
+        $query->bindValue(':administrator',$this->administrator);
+        return $query->execute();
+    }
+
+    /**
+     * @return bool
+     * @description deactivate or reactivate an account an update the database
+     */
+    public function changeAccountState(): bool
+    {
+        $pdo = DatabaseConnection::connect();
+        $query = $pdo->prepare('UPDATE USER SET deactivated = :deactivated WHERE username = :username');
+        if ($this->deactivated){
+            $this->deactivated = 0;
+        }
+        else{
+            $this->deactivated = 1;
+        }
+        $query->bindValue(':username',$this->username);
+        $query->bindValue(':deactivated',$this->deactivated);
+        return $query->execute();
     }
 
     /**
@@ -215,5 +275,32 @@ class UserModel
             return false;
         }
         return true;
+    }
+
+    /**
+     * @param $like
+     * @return false|PDOStatement
+     * @description Get all the users that have $like in their username from the database
+     */
+    public static function getAllUsersLike($like){
+        $pdo = DatabaseConnection::connect();
+        $query = $pdo->prepare('SELECT * FROM USER WHERE username LIKE :like');
+        $query->bindValue(':like','%'.$like.'%');
+
+        $query->execute();
+        return $query;
+    }
+
+    /**
+     * @param $username
+     * @return bool
+     * @description delete a user from the database based on its username
+     */
+    public static function DeleteFromDatabaseByUsername($username): bool
+    {
+        $pdo = DatabaseConnection::connect();
+        $query = $pdo->prepare('DELETE FROM USER WHERE username = :username');
+        $query->bindValue(':username', $username);
+        return $query->execute();
     }
 }

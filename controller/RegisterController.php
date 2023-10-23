@@ -62,7 +62,7 @@ class RegisterController
                 throw new \Exception('Adresse invalide');
             }
             if (!$this->validatePasswordRegex($_POST['password'])) {
-                throw new \Exception('Le mot de passe doit contenir 8 caractères dont :\n   -Une majuscule\n    -Une minuscule\n    -Un chiffre\n -Un caractère spécial');
+                throw new \Exception('Le mot de passe doit contenir 8 caractères dont :<br>'.PHP_EOL.'      -Une majuscule<br>'.PHP_EOL.'     -Une minuscule<br>'.PHP_EOL.'      -Un chiffre<br>'.PHP_EOL.'     -Un caractère spécial');
             }
             if (!$this->doubleCheckPassword($_POST['password'],$_POST['verifPassword'])){
                 throw new \Exception('Les mots de passe ne correspondent pas.');

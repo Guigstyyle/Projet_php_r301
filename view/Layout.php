@@ -1,4 +1,5 @@
 <?php
+    require_once __DIR__ . '/user/AdminPage.php';
 class Layout {
 private $title;
 private $content;
@@ -17,7 +18,7 @@ public function show(): void {
 </head>
 <body>
 <h1>Page de <?= $this->title; ?></h1>
-<a href="index.php"><button>Acueil</button></a>
+<a href="index.php"><button>Accueil</button></a>
 <?= $this->content; ?>
 </body>
 </html>

@@ -124,9 +124,10 @@ class TicketModel
         $query = $pdo->prepare('SELECT * FROM COMMENT WHERE idticket = :id');
         $query->bindValue(':id',$this->id);
         $query->execute();
-        $comments[] = array();
+        $comments = array();
         while ($comment = $query->fetch(PDO::FETCH_ASSOC)){
-            $comments[] = $comment;
+
+            $comments[] = new CommentModel($comment['idcomment']);
         }
         return $comments;
     }

@@ -53,6 +53,30 @@ class CommentModel
 
         $this->id = $pdo->lastInsertId();
     }
+
+    /**
+     * @return mixed
+     */
+    public function getUsername()
+    {
+        return $this->username;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getText()
+    {
+        return $this->text;
+    }
+
+    /**
+     * @param mixed $text
+     */
+    public function setText($text): void
+    {
+        $this->text = $text;
+    }
     public function getFrontnameByUsername(): string
     {
         $user = new UserModel($this->username);

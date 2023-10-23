@@ -53,12 +53,16 @@ Catégories :<br>
 </form>
 <label>Commentaires :</label>
 <ul>';
-        foreach ($comments as $comment){
-            $content.= '<li>
-Auteur :'.$comment['username'].'
+        }
+            foreach ($comments as $comment) {
+
+                $content .= '<li>
+Auteur :' . $comment->getFrontnameByUsername() . '<br>
+Commentaire :'.$comment->get.'
 </li>';
-        }
-        }
+            }
+
+
         return $content;
 
 

@@ -57,6 +57,13 @@ class CommentModel
     /**
      * @return mixed
      */
+    public function getId()
+    {
+        return $this->id;
+    }
+    /**
+     * @return mixed
+     */
     public function getUsername()
     {
         return $this->username;
@@ -76,6 +83,11 @@ class CommentModel
     public function setText($text): void
     {
         $this->text = $text;
+        $pdo = DatabaseConnection::connect();
+        $query = $pdo->prepare('UPDATE COMMENT SET text = :text WHERE idcomment = :id');
+        $query->bindValue(':text',$text);
+        $query->bindValue(':id',$this->id);
+        $query->execute();
     }
     public function getFrontnameByUsername(): string
     {

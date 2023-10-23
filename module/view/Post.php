@@ -1,8 +1,5 @@
 <?php
 
-/**
- * @todo Trouver un moyen de recuperer le frontname dans un commentaire
- */
 class Post
 {
     public function setContent($ticket): string
@@ -54,18 +51,28 @@ Catégories :<br>
 <label>Commentaires :</label>
 <ul>';
         }
-            foreach ($comments as $comment) {
+        foreach ($comments as $comment) {
 
-                $content .= '<li>
-Auteur :' . $comment->getFrontnameByUsername() . '<br>
-Commentaire :'.$comment->get.'
-</li>';
+            $content .= '<li class="comment">
+<form method="post" action="index.php">'
+                . $comment->getFrontnameByUsername() . ' :<br>
+<p>' . $comment->getText() . '</p><br>';
+            if (isset($_SESSION['suid']) and $_SESSION['user']->getUsername() === $comment->getUsername()){
+                $content .= '
+
+    <button class="modifyComment">Modifier</button><br>
+
+    <button type="submit" name="action" value="deleteComment">Supprimer</button><br>
+    <input type="hidden" name="idcomment" value="'.$comment->getId().'">
+    <input type="hidden" name="idticket" value="'.$ticket->getId().'">
+</form>';
             }
-
-
+$content .= '</li>';
+        }
+        $content .= '</ul>
+<script src="/_assets/lib/http_ajax.googleapis.com_ajax_libs_jquery_2.1.1_jquery.js"></script>
+<script src="/_assets/scripts/EditComment.js"></script>';
         return $content;
-
-
     }
 
     public function show($ticket)

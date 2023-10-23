@@ -16,6 +16,25 @@ class CommentController
             }
 
         }
+        if ($action === 'modifyComment'){
+            if ($this->modifyComment()){
+                $ticket = new TicketModel($_POST['idticket']);
+                (new Post())->show($ticket);
+            }
+        }
+    }
+
+    /**
+     * @todo verify the form
+     */
+    public function modifyComment(): bool
+    {
+        $id = $_POST['idcomment'];
+        $text = $_POST['modifiedComment'];
+        $comment = new CommentModel($id);
+        $comment->setText($text);
+        return true;
+
     }
     public function comment(){
         if (!$this->validateCommentForm()){

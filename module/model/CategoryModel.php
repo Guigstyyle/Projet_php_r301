@@ -63,6 +63,8 @@ class CategoryModel
         $query->bindValue(':name', $name);
         $query->execute();
         $result = $query->fetch(PDO::FETCH_ASSOC);
+        $this->name = $name;
+        $this->description = $description;
         $this->idCategory = $result['idcategory'];
     }
 
@@ -187,6 +189,17 @@ class CategoryModel
 
         $query->execute();
         return $query;
+    }
+    public static function getAllcategories(){
+        $pdo = DatabaseConnection::connect();
+        $query = $pdo->prepare('SELECT * FROM CATEGORY');
+        $query->execute();
+
+        $categories = array();
+        while ($category = $query->fetch(PDO::FETCH_ASSOC)) {
+            $categories[] = (new CategoryModel($category['idcategory']));
+        }
+        return $categories;
     }
     public static function getCategoryIdByName($name){
         $pdo = DatabaseConnection::connect();

@@ -9,7 +9,7 @@ class ModifyCategory
     {
         return <<<HTML
 <form method="post" action="index.php">
-    <input type="hidden" name="id" value="{$id}">
+    <input type="hidden" name="idcategory" value="{$id}">
     <label>
         Nom de la category
         <input type="text" name="categoryName" placeholder="Nom" value="{$categoryName}" maxlength="50">

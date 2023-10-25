@@ -6,7 +6,7 @@ if (isset($_GET['query'])) {
     $like = $_GET['query'];
     $pdo = \DatabaseConnection::connect();
     $query = $pdo->prepare('SELECT name FROM CATEGORY WHERE name LIKE :like ORDER BY name LIMIT 10');
-    $query->bindValue(':like','%'.$like.'%');
+    $query->bindValue(':like',$like.'%');
     $query->execute();
 
     $suggestions ='';

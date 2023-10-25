@@ -27,6 +27,8 @@ class TicketModel
         }
     }
 
+
+
     public function __construct1($id)
     {
         $this->id = $id;
@@ -212,7 +214,22 @@ FROM TICKETCATEGORY
     {
         return strlen($message) < 2001;
     }
+    public static function deleteTicket($idticket): bool
+    {
+        $pdo = DatabaseConnection::connect();
+        $query = $pdo->prepare('DELETE FROM TICKET WHERE idticket = :idticket');
+        $query->bindValue(':idticket', $idticket);
+        return $query->execute();
+    }
+    public static function getAllTicketsLike($like)
+    {
+        $pdo = DatabaseConnection::connect();
+        $query = $pdo->prepare('SELECT * FROM TICKET WHERE title LIKE :like or message LIKE :like');
+        $query->bindValue(':like', '%' . $like . '%');
 
+        $query->execute();
+        return $query;
+    }
     public static function getFiveLast(): array
     {
         $pdo = DatabaseConnection::connect();

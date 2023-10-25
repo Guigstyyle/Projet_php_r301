@@ -3,6 +3,7 @@
 
 require_once __DIR__ . '/../model/UserModel.php';
 require_once __DIR__ . '/../view/ErrorPage.php';
+require_once __DIR__ . '/../view/user/AdminPage.php';
 require_once __DIR__ . '/../view/user/SearchUser.php';
 require_once __DIR__ . '/../model/UserModel.php';
 
@@ -17,19 +18,19 @@ class UserStateController
         }
         if ($action === 'deleteUser') {
             if ($this->deleteUser($_POST['username'])) {
-                echo 'Supprimé ?';
+                (new AdminPage())->show();
             }
         }
         if ($action === 'changeAdminState') {
             $user = new UserModel($_POST['username']);
             if ($this->changeAdminState($user)) {
-                echo 'c\'est bon';
+                (new AdminPage())->show();
             }
         }
         if ($action === 'changeAccountState') {
             $user = new UserModel($_POST['username']);
             if ($this->changeAccountState($user)) {
-                echo 'c\'est bon state';
+                (new AdminPage())->show();
             }
         }
     }

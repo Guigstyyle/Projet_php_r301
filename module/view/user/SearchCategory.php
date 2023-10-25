@@ -21,11 +21,12 @@ class SearchCategory
         <td><form action="index.php" method="post">
             <input type="hidden" name="categoryName" value="{$name}">
             <input type="hidden" name="description" value="{$description}">
-            <input type="hidden" name="id" value="{$id}">
+            <input type="hidden" name="idcategory" value="{$id}">
+            <button type="submit" name="action" value="showCategory">Voir</button> 
             <button type="submit" name="action" value="toModifyCategory">Modifier</button> 
             </form></td>
         <td><form action="index.php" method="post">
-            <input type="hidden" name="id" value="{$id}">
+            <input type="hidden" name="idcategory" value="{$id}">
             <button type="submit" name="action" value="deleteCategory">Supprimer</button> 
             </form></td></tr>
 

@@ -31,7 +31,8 @@ try {
             $action === 'toSearchCategory' or
             $action === 'deleteCategory' or
             $action === 'toModifyCategory' or
-            $action === 'modifyCategory') {
+            $action === 'modifyCategory' or
+            $action === 'showCategory') {
             (new CategoryController())->execute();
         }
         if ($action === 'toAdminPage') {
@@ -50,7 +51,9 @@ try {
             $action === 'post' or
             $action === 'showTicket' or
             $action === 'toModifyTicket' or
-            $action === 'modifyTicket') {
+            $action === 'modifyTicket' or
+            $action === 'deleteTicket' or
+        $action === 'toSearchTicket') {
             (new PostController())->execute();
         }
         if ($action === 'comment' or

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost
--- Généré le : lun. 23 oct. 2023 à 17:10
+-- Généré le : mar. 24 oct. 2023 à 17:31
 -- Version du serveur : 10.1.29-MariaDB
 -- Version de PHP : 7.3.33
 
@@ -42,7 +42,8 @@ INSERT INTO `CATEGORY` (`idcategory`, `name`, `description`) VALUES
 (6, 'Huh ?', 'Huh ?'),
 (9, 'blabla', 'que du blabla'),
 (10, 'bon Ã§a marche plutot bien', 'c\'esr vraimen sympatique tout Ã§a en sah de sah de sah tah les ouf'),
-(11, 'Sugar', 'Pour les fans de sucre');
+(11, 'Sugar', 'Pour les fans de sucre'),
+(15, 'la redirect mod', 'Sample text 2');
 
 -- --------------------------------------------------------
 
@@ -63,8 +64,9 @@ CREATE TABLE `COMMENT` (
 --
 
 INSERT INTO `COMMENT` (`idcomment`, `text`, `date`, `idticket`, `username`) VALUES
-(5, 'ah oui c\'est vraiment bon !', '2023-10-23 16:32:26', 7, 'LeG'),
-(7, 'Mais vraiment c\'est super', '2023-10-23 16:34:52', 7, 'LeG');
+(7, 'bon c\'est bon ?', '2023-10-23 16:34:52', 7, 'LeG'),
+(8, 'et la c\'est super bon vraiment excellent', '2023-10-24 10:36:22', 7, 'LeG'),
+(14, 'Huh?', '2023-10-24 11:34:07', 6, 'leV');
 
 -- --------------------------------------------------------
 
@@ -101,8 +103,8 @@ INSERT INTO `TICKET` (`idticket`, `title`, `message`, `date`, `username`) VALUES
 (6, 'Huh ?', 'Huh huh huh huh ?', '2023-10-23 12:10:29', 'leV'),
 (7, 'Sucre', 'Le sucre c\'est bon', '2023-10-23 12:11:11', 'Sucre'),
 (8, 'Destination le bonne endroit', 'La page de post ?', '2023-10-23 12:14:07', 'LeG'),
-(11, 'a', 'a', '2023-10-23 15:39:44', NULL),
-(12, 'Test de suppression de compte', 'Va-t\'il afficher \'compte supprimÃ©\' ?', '2023-10-23 16:42:42', NULL);
+(12, 'Test de suppression de compte', 'Va-t\'il afficher \'compte supprimÃ©\' ?', '2023-10-23 16:42:42', NULL),
+(14, 'Post avec un message tres long', 'Ceci est un message trÃ¨s long. Ceci est un message trÃ¨s long. Ceci est un message trÃ¨s long. Ceci est un message trÃ¨s long. Ceci est un message trÃ¨s long. Ceci est un message trÃ¨s long. Ceci est un message trÃ¨s long. Ceci est un message trÃ¨s long. Ceci est un message trÃ¨s long. Ceci est un message trÃ¨s long. Ceci est un message trÃ¨s long. Ceci est un message trÃ¨s long. Ceci est un message trÃ¨s long. Ceci est un message trÃ¨s long. Ceci est un message trÃ¨s long. Ceci est un message trÃ¨s long. Ceci est un message trÃ¨s long. Ceci est un message trÃ¨s long. Ceci est un message trÃ¨s long. Ceci est un message trÃ¨s long. Ceci est un message trÃ¨s long. ', '2023-10-24 16:11:29', 'LeG');
 
 -- --------------------------------------------------------
 
@@ -148,9 +150,9 @@ CREATE TABLE `USER` (
 --
 
 INSERT INTO `USER` (`username`, `mail`, `password`, `frontname`, `firstconnection`, `lastconnection`, `administrator`, `deactivated`) VALUES
-('LeG', 'adresse@exemple.com', 'Test000*', 'Guigstyle', '2023-10-17 11:58:34', '2023-10-23 16:42:56', 1, 0),
+('LeG', 'adresse@exemple.com', 'Test000*', 'Guigstyle', '2023-10-17 11:58:34', '2023-10-24 16:45:36', 1, 0),
 ('Sucre', 'sucre@sucre.sucre', 'Lesucre*3', 'hmm le sucre', '2023-10-19 11:00:27', '2023-10-23 12:12:00', 0, 0),
-('leV', 'huh@huh.huh', 'Huh0000*', 'huh', '2023-10-19 09:56:46', '2023-10-23 12:10:07', 0, 0);
+('leV', 'huh@huh.huh', 'Huh0000*', 'huh', '2023-10-19 09:56:46', '2023-10-24 16:45:25', 0, 0);
 
 --
 -- Index pour les tables déchargées
@@ -208,19 +210,19 @@ ALTER TABLE `USER`
 -- AUTO_INCREMENT pour la table `CATEGORY`
 --
 ALTER TABLE `CATEGORY`
-  MODIFY `idcategory` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `idcategory` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT pour la table `COMMENT`
 --
 ALTER TABLE `COMMENT`
-  MODIFY `idcomment` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `idcomment` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT pour la table `TICKET`
 --
 ALTER TABLE `TICKET`
-  MODIFY `idticket` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `idticket` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- Contraintes pour les tables déchargées

@@ -3,7 +3,7 @@ require_once __DIR__ . '/../view/user/EditTicket.php';
 require_once __DIR__ . '/../view/user/PostPage.php';
 require_once __DIR__ . '/../model/TicketModel.php';
 require_once __DIR__ . '/../model/CategoryModel.php';
-
+require_once __DIR__ . '/../view/user/SearchTicket.php';
 require_once __DIR__ . '/../view/Post.php';
 
 /**
@@ -37,6 +37,14 @@ class PostController
         if ($action === 'modifyTicket'){
             if ($ticket = $this->modifyTicket())
                 (new Post())->show($ticket);
+        }
+        if ($action === 'deleteTicket'){
+            TicketModel::deleteTicket($_POST['idticket']);
+            (new Homepage())->show(TicketModel::getFiveLast());
+        }
+        if ($action === 'toSearchTicket'){
+            $tickets = TicketModel::getAllTicketsLike($_POST['titleOrMessageLike']);
+            (new SearchTicket())->show($tickets);
         }
     }
     public function modifyTicket(): TicketModel

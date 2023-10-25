@@ -10,7 +10,7 @@ class AdminPage
 {
     /**
      * @return string
-     * @todo add all management option for comments(delete) and tickets(delete)
+     * @todo add all management option for comments(delete)
      */
     public function setContent(): string
     {
@@ -32,6 +32,16 @@ class AdminPage
             <input type="text" name="usernameLike"><br>
         </label>
         <button type="submit" name="action" value="toSearchUser">Rechercher un utilisateur</button>
+    </form>
+</section>
+<section>
+    <form method="post" action="index.php">
+        <label>
+            Rechercher un billet<br>
+            <input type="text" name="titleOrMessageLike"><br>
+        </label>
+        <button type="submit" name="action" value="toSearchTicket">Rechercher un billet</button>
+    </form>
 </section>
 HTML;
     }

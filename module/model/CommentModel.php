@@ -23,6 +23,14 @@ class CommentModel
         }
     }
 
+    public static function deleteComment($idcomment): bool
+    {
+        $pdo = DatabaseConnection::connect();
+        $query = $pdo->prepare('DELETE FROM COMMENT WHERE idcomment = :idcomment');
+        $query->bindValue(':idcomment', $idcomment);
+        return $query->execute();
+    }
+
     public function __construct1($id){
         $this->id = $id;
         $pdo = DatabaseConnection::connect();

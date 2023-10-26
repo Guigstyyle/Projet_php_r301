@@ -258,7 +258,7 @@ class UserModel
         $this->password = $password;
         $pdo = DatabaseConnection::connect();
         $query = $pdo->prepare('UPDATE USER SET password = :newpassword WHERE username = :username');
-        $query->bindValue(':newpassword',$password);
+        $query->bindValue(':newpassword',password_hash($password,PASSWORD_BCRYPT));
         $query->bindValue(':username',$this->username);
         $query->execute();
     }
@@ -340,7 +340,7 @@ class UserModel
         if (!$result) {
             return $result;
         }
-        if ($password === $result['password']) {
+        if (password_verify($password,$result['password'])) {
             return true;
         }
         return false;

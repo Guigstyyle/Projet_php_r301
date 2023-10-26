@@ -1,8 +1,4 @@
 <?php
-
-/**
- * @todo display tickets of the category
- */
 class Category
 {
     public function setContent($category): string

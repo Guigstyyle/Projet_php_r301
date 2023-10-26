@@ -16,6 +16,8 @@ require_once 'module/controller/UserStateController.php';
 require_once 'module/controller/LogoutController.php';
 require_once 'module/controller/CommentController.php';
 require_once 'module/controller/SearchController.php';
+require_once 'module/controller/ForgotPasswordController.php';
+
 try {
     if (isset($_POST['action'])) {
         $action = $_POST['action'];
@@ -72,6 +74,10 @@ try {
             $action === 'changePassword'){
             (new AccountPageController())->execute();
         }
+        if ($action === 'toForgotPassword' or
+            $action === 'forgotPassword'){
+            (new ForgotPasswordController())->execute();
+        }
     } else {
         (new HomepageController())->execute();
     }
@@ -83,7 +89,6 @@ try {
  * a faire :
  * mentions (mentionner d'autres users, donc changer les pages de commentaire et de billet et faire un page ou chque user voit ses mentions)
  * validation mail de creation du compte,
- * sécuriser les mots de passe,
  * mot de passe oublié,
  * faire la doc,
  * Gérer les erreurs partout

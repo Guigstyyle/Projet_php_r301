@@ -16,8 +16,10 @@ class Login
         Password :<br>
         <input type="password" name="password" placeholder="password" maxlength="255"><br>
     </label>
-    <button type="reset" name="cancel">Cancel</button>
-    <button type="submit" name="action" value="login">Login</button>
+    <button type="reset" name="cancel">Effacer</button>
+    <button type="submit" name="action" value="login">Login</button><br>
+    <button type="submit" name="action" value="toForgotPassword">Mot de passe oublié</button>
+    
 </form>
 HTML;
     }

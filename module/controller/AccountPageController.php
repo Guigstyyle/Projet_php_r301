@@ -76,7 +76,7 @@ class AccountPageController
             }
         }
         $password = $_POST['password'];
-        if ($password !== $user->getPassword()) {
+        if (!password_verify($password,$user->getPassword())) {
             return false; //Wrong password
         }
         return true;

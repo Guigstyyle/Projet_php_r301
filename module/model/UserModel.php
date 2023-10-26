@@ -85,14 +85,14 @@ class UserModel
     /**
      * @param $username
      * @param $mail
-     * @param $password
+     * @param $password (Hashs it)
      * @return void
      */
     public function attributeInitialisation($username, $mail, $password): void
     {
         $this->username = $username;
         $this->mail = $mail;
-        $this->password = $password;
+        $this->password = password_hash($password,PASSWORD_BCRYPT);
         $this->firsconnection = date('Y-m-d H:i:s');
         $this->lasconnection = date('Y-m-d H:i:s');
         $this->administrator = 0;
@@ -163,8 +163,6 @@ class UserModel
     {
         return $this->username;
     }
-
-
     /**
      * @return string
      */
@@ -174,7 +172,7 @@ class UserModel
     }
 
     /**
-     * @return string
+     * @return string the password is hashed using PASSWORD_BCRYPT
      */
     public function getPassword(): string
     {

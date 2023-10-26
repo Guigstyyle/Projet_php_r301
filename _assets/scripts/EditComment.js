@@ -16,7 +16,6 @@ $(document).ready(function() {
         $(saveButton).click(function() {
             // Get the edited comment text from the textarea
             let editedText = textarea.val();
-            console.log(editedText);
 
             // Replace the textarea with the updated comment text
             textarea.replaceWith("<p>" + editedText + "</p");

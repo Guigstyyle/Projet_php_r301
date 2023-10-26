@@ -19,16 +19,22 @@ if (session_status() == PHP_SESSION_NONE) {
     <title><?= $this->title; ?></title>
     <link href="style.css" rel="stylesheet"/>
 </head>
-<header></header>
 <body>
 <header>
-
     <form method="post" action="index.php">
         <button>Accueil</button>
+        <input id="searchBar" type="search" name="searchLike" placeholder="billet, catégorie, commentaire" autocomplete="off">
+        <ul id="suggestions">
+
+        </ul>
+        <button type="submit" name="action" value="toSearch">Rechercher</button>
         <?php if (isset($_SESSION['suid'])) {
             echo '<button type="submit" name="action" value="logout">Logout</button>';
-            echo '<button type="submit" name="action" value="toPost">Poster</button>';
-            if ($_SESSION['user']->getAdministrator()) {
+            if ($_SESSION['user']->getDeactivated() === 0) {
+                echo '<button type="submit" name="action" value="toPost">Poster</button>';
+            }
+            echo '<button type="submit" name="action" value="toAccountPage">Mon Profil</button>';
+            if ($_SESSION['user']->getAdministrator() and $_SESSION['user']->getDeactivated() === 0) {
                 echo '<button type="submit" name="action" value="toAdminPage">Admin</button>';
             }
         } else {
@@ -40,11 +46,9 @@ if (session_status() == PHP_SESSION_NONE) {
 
 <h1>Page de <?= $this->title; ?></h1>
 <?= $this->content; ?>
-<br>
-<br>
-<br>
-<button id="test">test</button>
-
+<footer></footer>
+<script src="/_assets/lib/http_ajax.googleapis.com_ajax_libs_jquery_2.1.1_jquery.js"></script>
+<script src="/_assets/scripts/AllAutosuggest.js"></script>
 </body>
 </html>
 <?php

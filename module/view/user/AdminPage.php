@@ -43,6 +43,15 @@ class AdminPage
         <button type="submit" name="action" value="toSearchTicket">Rechercher un billet</button>
     </form>
 </section>
+<section>
+    <form method="post" action="index.php">
+        <label>
+            Rechercher un commentaire<br>
+            <input type="text" name="textLike"><br>
+        </label>
+        <button type="submit" name="action" value="toSearchComment">Rechercher un commentaire</button>
+    </form>
+</section>
 HTML;
     }
 

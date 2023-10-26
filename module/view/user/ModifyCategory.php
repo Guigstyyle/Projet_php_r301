@@ -11,12 +11,12 @@ class ModifyCategory
 <form method="post" action="index.php">
     <input type="hidden" name="idcategory" value="{$id}">
     <label>
-        Nom de la category
-        <input type="text" name="categoryName" placeholder="Nom" value="{$categoryName}" maxlength="50">
+        Nom de la categorie :<br>
+        <input type="text" name="categoryName" placeholder="Nom" value="{$categoryName}" maxlength="50"><br>
     </label>
     <label>
-        Description
-        <textarea name="description" placeholder="Description" maxlength="3000">{$description}</textarea>
+        Description :<br>
+        <textarea name="description" placeholder="Description" maxlength="3000">{$description}</textarea><br>
     </label>
     <button type="submit" name="action" value="modifyCategory">Modifier la catégorie</button>
 </form>

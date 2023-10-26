@@ -6,15 +6,15 @@ class SearchTicket
 {
     public function setContent($ticket): string
     {
-        $id = $ticket['idticket'];
-        $title = $ticket['title'];
-        if (strlen($ticket['message']) > 50) {
-            $message = substr($ticket['message'], 0, 50) . '...';
+        $id = $ticket->getIdTicket();
+        $title = $ticket->getTitle();
+        if (strlen($ticket->getMessage()) > 50) {
+            $message = substr($ticket->getMessage(), 0, 50) . '...';
         } else {
-            $message = $ticket['message'];
+            $message = $ticket->getMessage();
         }
-        $date = $ticket['date'];
-        $username = $ticket['username'];
+        $date = $ticket->getDate();
+        $username = $ticket->getUsername();
         return <<<HTML
         <tr>
         <td>{$id}</td>
@@ -38,8 +38,9 @@ HTML;
         <tr><th>Id</th><th>title</th><th>message</th><th>date</th><th>username</th></tr>
     </thead>
     <tbody>' . PHP_EOL;
-        while ($ticket = $tickets->fetch(PDO::FETCH_ASSOC))
+        foreach ($tickets as $ticket){
             $content .= $this->setContent($ticket);
+        }
         $content .= '</tbody>' . PHP_EOL . '</table>';
         (new Layout('Résultat de la recherche :', $content))->show();
 

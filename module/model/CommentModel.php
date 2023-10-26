@@ -3,7 +3,7 @@
 require_once '_assets/includes/DatabaseConnection.php';
 class CommentModel
 {
-    private $id;
+    private $idComment;
     private $text;
     private $username;
     private $idTicket;
@@ -31,11 +31,11 @@ class CommentModel
         return $query->execute();
     }
 
-    public function __construct1($id){
-        $this->id = $id;
+    public function __construct1($idComment){
+        $this->idComment = $idComment;
         $pdo = DatabaseConnection::connect();
         $query = $pdo->prepare('SELECT * FROM COMMENT WHERE idcomment = :idcomment');
-        $query->bindValue(':idcomment',$id);
+        $query->bindValue(':idcomment',$idComment);
         $query->execute();
         $comment = $query->fetch(PDO::FETCH_ASSOC);
 
@@ -59,15 +59,23 @@ class CommentModel
         $query->bindValue(':date',$this->date);
         $query->execute();
 
-        $this->id = $pdo->lastInsertId();
+        $this->idComment = $pdo->lastInsertId();
     }
 
     /**
      * @return mixed
      */
-    public function getId()
+    public function getIdComment()
     {
-        return $this->id;
+        return $this->idComment;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIdTicket()
+    {
+        return $this->idTicket;
     }
     /**
      * @return mixed
@@ -86,15 +94,23 @@ class CommentModel
     }
 
     /**
+     * @return mixed
+     */
+    public function getDate()
+    {
+        return $this->date;
+    }
+
+    /**
      * @param mixed $text
      */
     public function setText($text): void
     {
         $this->text = $text;
         $pdo = DatabaseConnection::connect();
-        $query = $pdo->prepare('UPDATE COMMENT SET text = :text WHERE idcomment = :id');
+        $query = $pdo->prepare('UPDATE COMMENT SET text = :text WHERE idcomment = :idTicket');
         $query->bindValue(':text',$text);
-        $query->bindValue(':id',$this->id);
+        $query->bindValue(':idTicket',$this->idComment);
         $query->execute();
     }
     public function getFrontnameByUsername(): string
@@ -104,5 +120,18 @@ class CommentModel
     }
     public static function textLenLimit($text){
         return (strlen($text) <3001);
+    }
+    public static function getAllCommentsLike($like)
+    {
+        $pdo = DatabaseConnection::connect();
+        $query = $pdo->prepare('SELECT * FROM COMMENT WHERE UPPER(text) LIKE UPPER(:like) ORDER BY UPPER(text)');
+        $query->bindValue(':like', '%' . $like . '%');
+        $query->execute();
+        $comments = array();
+        while ($comment = $query->fetch(PDO::FETCH_ASSOC)) {
+
+            $comments[] = new CommentModel($comment['idcomment']);
+        }
+        return $comments;
     }
 }

@@ -13,19 +13,17 @@ class Homepage
     <h2>Voici les 5 derniers posts :</h2>
     <table>
         <thead>
-            <tr><th>Titre</th><th>Auteur</th><th>Message</th></tr>
+            <tr><th>Titre</th><th>Auteur</th><th>Message</th><th>Date</th></tr>
         </thead>
         <tbody>
 
 HTML;
         foreach ($fiveLast as $ticket) {
-            $id = $ticket->getId();
+            $id = $ticket->getIdTicket();
             $title = $ticket->getTitle();
-            if ($username = $ticket->getUsername()) {
-                $frontname = $ticket->getFrontnameByUsername($username);
-            } else {
-                $frontname = 'Compte supprimé';
-            }
+            $date = $ticket->getDate();
+            $frontname = $ticket->getFrontnameByUsername();
+            $username = $ticket->getUsername();
 
             if (strlen($ticket->getMessage()) > 50) {
                 $message = substr($ticket->getMessage(), 0, 50) . '...';
@@ -37,11 +35,12 @@ HTML;
                 <td>' . $title . '</td>
                 <td>' . $frontname . '</td>
                 <td>' . $message . '</td>
+                <td>' . date('d/m/Y H\hi',strtotime($date)) . '</td>
                 <td>
                     <form method="post" action="index.php">
                         <input type="hidden" name="idticket" value="' . $id . '">
                         <button type="submit" name="action" value="showTicket">Voir</button>';
-            if (isset($_SESSION['suid']) and $username === $_SESSION['user']->getUsername()) {
+            if (isset($_SESSION['suid']) and $username === $_SESSION['user']->getUsername() and $_SESSION['user']->getDeactivated() === 0) {
                 $content .= '<button type="submit" name="action" value="toModifyTicket">Modifier</button>';
                 $content .= '<button type="submit" name="action" value="deleteTicket">Supprimer</button>';
             }

@@ -49,7 +49,7 @@ class PostController
     }
     public function modifyTicket(): TicketModel
     {
-        $id = $_POST['id'];
+        $id = $_POST['idTicket'];
         $title = $_POST['title'];
         $message = $_POST['message'];
         $ticket = new TicketModel($id);

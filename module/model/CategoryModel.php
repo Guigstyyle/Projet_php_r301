@@ -1,6 +1,7 @@
 <?php
 
 require_once '_assets/includes/DatabaseConnection.php';
+require_once __DIR__ . '/TicketModel.php';
 
 class CategoryModel
 {
@@ -24,7 +25,6 @@ class CategoryModel
             call_user_func_array([$this, $fn], $arguments);
         }
     }
-
 
 
     /**
@@ -176,21 +176,41 @@ class CategoryModel
         return true;
     }
 
-    /**
-     * @param $like
-     * @return false|PDOStatement
-     * @description Get all the categories that have $like in their name from the database
-     */
-    public static function getAllCategoriesLike($like)
+    public function getTickets()
     {
         $pdo = DatabaseConnection::connect();
-        $query = $pdo->prepare('SELECT * FROM CATEGORY WHERE name LIKE :like');
-        $query->bindValue(':like', '%' . $like . '%');
-
+        $query = $pdo->prepare('SELECT idticket FROM TICKETCATEGORY WHERE idcategory = :idTicket');
+        $query->bindValue(':idTicket',$this->idCategory);
         $query->execute();
-        return $query;
+
+        $tickets = array();
+        while ($ticket = $query->fetch(PDO::FETCH_ASSOC)) {
+            $tickets[] = (new TicketModel($ticket['idticket']));
+        }
+        return $tickets;
     }
-    public static function getAllcategories(){
+
+    /**
+     * @param $like
+     * @return array
+     * @description Get all the categories that have $like in their name from the database
+     */
+    public static function getAllCategoriesLike($like): array
+    {
+        $pdo = DatabaseConnection::connect();
+        $query = $pdo->prepare('SELECT * FROM CATEGORY WHERE UPPER(name) LIKE UPPER(:like) or UPPER(description) LIKE UPPER(:like) ORDER BY UPPER(name)');
+        $query->bindValue(':like', '%' . $like . '%');
+        $query->execute();
+
+        $categories = array();
+        while ($category = $query->fetch(PDO::FETCH_ASSOC)) {
+            $categories[] = new CategoryModel($category['idcategory']);
+        }
+        return $categories;
+    }
+
+    public static function getAllcategories(): array
+    {
         $pdo = DatabaseConnection::connect();
         $query = $pdo->prepare('SELECT * FROM CATEGORY');
         $query->execute();
@@ -201,10 +221,12 @@ class CategoryModel
         }
         return $categories;
     }
-    public static function getCategoryIdByName($name){
+
+    public static function getCategoryIdByName($name)
+    {
         $pdo = DatabaseConnection::connect();
         $query = $pdo->prepare('SELECT idcategory FROM CATEGORY WHERE name = :name');
-        $query->bindValue(':name',$name);
+        $query->bindValue(':name', $name);
         $query->execute();
         return $query->fetch(PDO::FETCH_ASSOC);
     }

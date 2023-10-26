@@ -9,11 +9,11 @@ class EditTicket
     {
         $title = $ticket->getTitle();
         $message = $ticket->getMessage();
-        $id = $ticket->getId();
+        $id = $ticket->getIdTicket();
         $categories = $ticket->getCategories();
         $content = '
 <form method="post" action="index.php">
-    <input type="hidden" name="id" value="'.$id.'"><br>
+    <input type="hidden" name="idTicket" value="'.$id.'"><br>
     <label>
         Titre<br>
         <input type="text" name="title" placeholder="Nom" value="'.$title.'" maxlength="100"><br>
@@ -22,10 +22,9 @@ class EditTicket
         Message<br>
         <textarea name="message" placeholder="Message" maxlength="3000">'.$message.'</textarea><br>
     </label>
-    <button type="submit" name="action" value="modifyTicket">Publier</button><br>
         <label>
         Catégoires:<br>
-        <input id="categorySearch" type="search" name="category" placeholder="Catégorie"><br>
+        <input id="categorySearch" type="search" name="category" placeholder="Catégorie" autocomplete="off"><br>
         <ul id="suggestions">
             
         </ul>
@@ -42,7 +41,7 @@ class EditTicket
     <button type="submit" name="action" value="modifyTicket">Publier</button>
 </form>
 <script src="/_assets/lib/http_ajax.googleapis.com_ajax_libs_jquery_2.1.1_jquery.js"></script>
-<script src="/_assets/scripts/test2.js"></script>
+<script src="/_assets/scripts/CategoryAutosuggest.js"></script>
 ';
         return $content;
     }

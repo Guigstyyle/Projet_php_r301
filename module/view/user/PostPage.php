@@ -16,7 +16,7 @@ class PostPage
     </label>
     <label>
         Catégoires:<br>
-        <input id="categorySearch" type="search" name="category" placeholder="Catégorie"><br>
+        <input id="categorySearch" type="search" name="category" placeholder="Catégorie" autocomplete="off"><br>
         <ul id="suggestions">
             
         </ul>
@@ -28,7 +28,7 @@ class PostPage
     <button type="submit" name="action" value="post">Publier</button>
 </form>
 <script src="/_assets/lib/http_ajax.googleapis.com_ajax_libs_jquery_2.1.1_jquery.js"></script>
-<script src="/_assets/scripts/test2.js"></script>
+<script src="/_assets/scripts/CategoryAutosuggest.js"></script>
 HTML;
 
     }

@@ -6,12 +6,12 @@ class SearchCategory
 {
     public function setContent($category): string
     {
-        $id = $category['idcategory'];
-        $name = $category['name'];
-        if (strlen($category['description']) > 50) {
-            $description = substr($category['description'], 0, 50) . '...';
+        $id = $category->getIdCategory();
+        $name = $category->getName();
+        if (strlen($category->getDescription()) > 50) {
+            $description = substr($category->getDescription(), 0, 50) . '...';
         } else {
-            $description = $category['description'];
+            $description = $category->getDescription();
         }
         return <<<HTML
         <tr>
@@ -40,10 +40,11 @@ HTML;
         <tr><th>Id</th><th>CategoryName</th><th>Description</th></tr>
     </thead>
     <tbody>' . PHP_EOL;
-        while ($category = $categories->fetch(PDO::FETCH_ASSOC))
+        foreach ($categories as $category) {
             $content .= $this->setContent($category);
-        $content .= '</tbody>' . PHP_EOL . '</table>';
-        (new Layout('Résultat de la recherche :', $content))->show();
+        }
+            $content .= '</tbody>' . PHP_EOL . '</table>';
+            (new Layout('Résultat de la recherche :', $content))->show();
 
     }
 }

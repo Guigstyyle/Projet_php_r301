@@ -4,7 +4,7 @@ require_once '_assets/includes/DatabaseConnection.php';
 
 class TicketModel
 {
-    private $id;
+    private $idTicket;
     private $title;
     private $message;
     private $date;
@@ -28,10 +28,9 @@ class TicketModel
     }
 
 
-
     public function __construct1($id)
     {
-        $this->id = $id;
+        $this->idTicket = $id;
         $pdo = DatabaseConnection::connect();
         $query = $pdo->prepare('SELECT * FROM TICKET WHERE idticket = :idticket');
         $query->bindValue(':idticket', $id);
@@ -81,7 +80,7 @@ class TicketModel
         $query->bindValue(':title', $title);
         $query->execute();
         $result = $query->fetch(PDO::FETCH_ASSOC);
-        $this->id = $result['idticket'];
+        $this->idTicket = $result['idticket'];
     }
 
     public function addCategory($categoryName)
@@ -90,7 +89,7 @@ class TicketModel
         $idCategory = CategoryModel::getCategoryIdByName($categoryName)['idcategory'];
         $query = $pdo->prepare('INSERT INTO TICKETCATEGORY (idcategory,idticket) VALUE (:idcategory,:idticket)');
         $query->bindValue(':idcategory', $idCategory);
-        $query->bindValue(':idticket', $this->id);
+        $query->bindValue(':idticket', $this->idTicket);
         $query->execute();
     }
 
@@ -112,22 +111,27 @@ class TicketModel
     {
         $pdo = DatabaseConnection::connect();
         $query = $pdo->prepare('DELETE FROM TICKETCATEGORY WHERE :idticket = idticket');
-        $query->bindValue(':idticket', $this->id);
+        $query->bindValue(':idticket', $this->idTicket);
         $query->execute();
     }
 
     public function getFrontnameByUsername(): string
     {
+        if (!isset($this->username)){
+            return 'Compte supprimé';
+        }
         $user = new UserModel($this->username);
         return $user->getFrontname();
     }
-    public function getComments(){
+
+    public function getComments()
+    {
         $pdo = DatabaseConnection::connect();
-        $query = $pdo->prepare('SELECT * FROM COMMENT WHERE idticket = :id');
-        $query->bindValue(':id',$this->id);
+        $query = $pdo->prepare('SELECT * FROM COMMENT WHERE idticket = :idTicket');
+        $query->bindValue(':idTicket', $this->idTicket);
         $query->execute();
         $comments = array();
-        while ($comment = $query->fetch(PDO::FETCH_ASSOC)){
+        while ($comment = $query->fetch(PDO::FETCH_ASSOC)) {
 
             $comments[] = new CommentModel($comment['idcomment']);
         }
@@ -137,10 +141,8 @@ class TicketModel
     public function getCategories()
     {
         $pdo = DatabaseConnection::connect();
-        $query = $pdo->prepare('SELECT CATEGORY.idcategory,CATEGORY.name,CATEGORY.description 
-FROM TICKETCATEGORY 
-    JOIN CATEGORY ON CATEGORY.idcategory = TICKETCATEGORY.idcategory WHERE :idticket = TICKETCATEGORY.idticket');
-        $query->bindValue(':idticket', $this->id);
+        $query = $pdo->prepare('SELECT idcategory FROM TICKETCATEGORY  WHERE :idticket = TICKETCATEGORY.idticket');
+        $query->bindValue(':idticket', $this->idTicket);
         $query->execute();
         $categories = array();
         while ($category = $query->fetch(PDO::FETCH_ASSOC)) {
@@ -159,9 +161,9 @@ FROM TICKETCATEGORY
         return strlen($title) < 101;
     }
 
-    public function getId()
+    public function getIdTicket()
     {
-        return $this->id;
+        return $this->idTicket;
     }
 
     public function getTitle()
@@ -188,8 +190,8 @@ FROM TICKETCATEGORY
     {
         $this->title = $title;
         $pdo = DatabaseConnection::connect();
-        $query = $pdo->prepare('UPDATE TICKET SET title = :title WHERE idticket = :id');
-        $query->bindValue(':id', $this->id);
+        $query = $pdo->prepare('UPDATE TICKET SET title = :title WHERE idticket = :idTicket');
+        $query->bindValue(':idTicket', $this->idTicket);
         $query->bindValue(':title', $title);
         $query->execute();
     }
@@ -198,8 +200,8 @@ FROM TICKETCATEGORY
     {
         $this->message = $message;
         $pdo = DatabaseConnection::connect();
-        $query = $pdo->prepare('UPDATE TICKET SET message = :message WHERE idticket = :id');
-        $query->bindValue(':id', $this->id);
+        $query = $pdo->prepare('UPDATE TICKET SET message = :message WHERE idticket = :idTicket');
+        $query->bindValue(':idTicket', $this->idTicket);
         $query->bindValue(':message', $message);
         $query->execute();
     }
@@ -214,6 +216,7 @@ FROM TICKETCATEGORY
     {
         return strlen($message) < 2001;
     }
+
     public static function deleteTicket($idticket): bool
     {
         $pdo = DatabaseConnection::connect();
@@ -221,15 +224,22 @@ FROM TICKETCATEGORY
         $query->bindValue(':idticket', $idticket);
         return $query->execute();
     }
+
     public static function getAllTicketsLike($like)
     {
         $pdo = DatabaseConnection::connect();
-        $query = $pdo->prepare('SELECT * FROM TICKET WHERE title LIKE :like or message LIKE :like');
+        $query = $pdo->prepare('SELECT * FROM TICKET WHERE UPPER(title) LIKE UPPER(:like) or 
+                           UPPER(message) LIKE UPPER(:like) ORDER BY UPPER(title)');
         $query->bindValue(':like', '%' . $like . '%');
-
         $query->execute();
-        return $query;
+
+        $tickets = array();
+        while ($ticket = $query->fetch(PDO::FETCH_ASSOC)) {
+            $tickets[] = new TicketModel($ticket['idticket']);
+        }
+        return $tickets;
     }
+
     public static function getFiveLast(): array
     {
         $pdo = DatabaseConnection::connect();

@@ -8,6 +8,7 @@ date_default_timezone_set('Europe/Paris');
 
 require_once 'module/controller/PostController.php';
 require_once 'module/controller/AdminPageController.php';
+require_once 'module/controller/AccountPageController.php';
 require_once 'module/controller/CategoryController.php';
 require_once 'module/controller/HomepageController.php';
 require_once 'module/controller/LoginController.php';
@@ -15,6 +16,7 @@ require_once 'module/controller/RegisterController.php';
 require_once 'module/controller/UserStateController.php';
 require_once 'module/controller/LogoutController.php';
 require_once 'module/controller/CommentController.php';
+require_once 'module/controller/SearchController.php';
 try {
     if (isset($_POST['action'])) {
         $action = $_POST['action'];
@@ -53,13 +55,23 @@ try {
             $action === 'toModifyTicket' or
             $action === 'modifyTicket' or
             $action === 'deleteTicket' or
-        $action === 'toSearchTicket') {
+            $action === 'toSearchTicket') {
             (new PostController())->execute();
         }
         if ($action === 'comment' or
-        $action === 'modifyComment' or
-        $action === 'deleteComment'){
+            $action === 'modifyComment' or
+            $action === 'deleteComment' or
+            $action === 'toSearchComment' or
+            $action === 'showComment') {
             (new CommentController())->execute();
+        }
+        if ($action === 'toSearch'){
+            (new SearchController())->execute();
+        }
+        if ($action === 'toAccountPage' or
+            $action === 'changeInformations' or
+            $action === 'changePassword'){
+            (new AccountPageController())->execute();
         }
     } else {
         (new HomepageController())->execute();
@@ -69,11 +81,12 @@ try {
     echo $exception->getMessage();
 }
 /**
- * Faut comprendre comment $SESSION fonctionne
- * Faut cacher ou monter les boutons en fonction du type de user connecté (pas connecté, user, admin)
- * Sur la page admin on peut chercher des category en fonction de leur nom (LIKE sql)
- * ça affichera une liste des catergory avec un bouton supprimer et un bouton modifier.
- * pareil avec les users mais avec les bouton supprimer desactiver et admin
- * Finir la doc des controllers
- * Le javascript c'est important
+ * a faire :
+ * mentions (mentionner d'autres users, donc changer les pages de commentaire et de billet et faire un page ou chque user voit ses mentions)
+ * validation mail de creation du compte,
+ * sécuriser les mots de passe,
+ * mot de passe oublié,
+ * faire la doc,
+ * Gérer les erreurs partout
+ * Une page de recherche avancé (si ya du temps)
  */

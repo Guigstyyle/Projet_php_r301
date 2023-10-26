@@ -5,14 +5,14 @@ class SearchUser
 {
     public function setContent($user): string
     {
-        $username = $user['username'];
-        $mail = $user['mail'];
-        $password = $user['password'];
-        $frontname = $user['frontname'];
-        $firstconnection = $user['firstconnection'];
-        $lastconnection = $user['lastconnection'];
-        $administrator = $user['administrator'];
-        $deactivated = $user['deactivated'];
+        $username = $user->getUsername();
+        $mail = $user->getMail();
+        $password = $user->getPassword();
+        $frontname = $user->getFrontname();
+        $firstconnection = $user->getFirstconnection();
+        $lastconnection = $user->getLastconnection();
+        $administrator = $user->getAdministrator();
+        $deactivated = $user->getDeactivated();
 
         if ($administrator) {
             $adminOrNot = 'Retrograder';
@@ -57,8 +57,9 @@ HTML;
         <tr><th>username</th><th>mail</th><th>password</th><th>frontname</th><th>firstconnection</th><th>lastconnection</th><th>administrator</th><th>deactivated</th></tr>
     </thead>
     <tbody>' . PHP_EOL;
-        while ($user = $users->fetch(PDO::FETCH_ASSOC))
+        foreach ($users as $user) {
             $content .= $this->setContent($user);
+        }
         $content .= '</tbody>' . PHP_EOL . '</table>';
         (new Layout('Résultat de la recherche :', $content))->show();
 

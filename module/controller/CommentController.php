@@ -1,5 +1,8 @@
 <?php
 require_once __DIR__ . '/../model/CommentModel.php';
+require_once __DIR__ . '/../model/TicketModel.php';
+
+require_once __DIR__ . '/../view/user/SearchComment.php';
 require_once __DIR__ . '/../view/Post.php';
 
 class CommentController
@@ -28,6 +31,16 @@ class CommentController
             CommentModel::deleteComment($_POST['idcomment']);
             $ticket = new TicketModel($_POST['idticket']);
             (new Post())->show($ticket);
+        }
+        if ($action === 'toSearchComment'){
+            $comments = CommentModel::getAllCommentsLike($_POST['textLike']);
+            (new SearchComment())->show($comments);
+        }
+        if ($action === 'showComment'){
+            $comment = new CommentModel($_POST['idcomment']);
+            $ticket = new TicketModel($comment->getIdTicket());
+            (new Post())->show($ticket,$comment);
+
         }
     }
 

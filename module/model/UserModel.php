@@ -164,6 +164,7 @@ class UserModel
         return $this->username;
     }
 
+
     /**
      * @return string
      */
@@ -191,7 +192,7 @@ class UserModel
     /**
      * @return string
      */
-    public function getFirsconnection(): string
+    public function getFirstconnection(): string
     {
         return $this->firsconnection;
     }
@@ -199,7 +200,7 @@ class UserModel
     /**
      * @return string
      */
-    public function getLasconnection(): string
+    public function getLastconnection(): string
     {
         return $this->lasconnection;
     }
@@ -219,8 +220,48 @@ class UserModel
     {
         return $this->deactivated;
     }
+    public function setUsername($username){
+        $pdo = DatabaseConnection::connect();
+        $query = $pdo->prepare('UPDATE USER SET username = :newusername WHERE username = :username');
+        $query->bindValue(':newusername',$username);
+        $query->bindValue(':username',$this->username);
+        $query->execute();
+        $this->username = $username;
+    }
 
+    /**
+     * @param mixed $frontname
+     */
+    public function setFrontname($frontname): void{
+        $this->frontname = $frontname;
+        $pdo = DatabaseConnection::connect();
+        $query = $pdo->prepare('UPDATE USER SET frontname = :newfrontname WHERE username = :username');
+        $query->bindValue(':newfrontname',$frontname);
+        $query->bindValue(':username',$this->username);
+        $query->execute();
+    }
 
+    /**
+     * @param mixed $mail
+     */
+    public function setMail($mail): void
+    {
+        $this->mail = $mail;
+        $pdo = DatabaseConnection::connect();
+        $query = $pdo->prepare('UPDATE USER SET mail = :newmail WHERE username = :username');
+        $query->bindValue(':newmail',$mail);
+        $query->bindValue(':username',$this->username);
+        $query->execute();
+    }
+
+    public function setPassword($password){
+        $this->password = $password;
+        $pdo = DatabaseConnection::connect();
+        $query = $pdo->prepare('UPDATE USER SET password = :newpassword WHERE username = :username');
+        $query->bindValue(':newpassword',$password);
+        $query->bindValue(':username',$this->username);
+        $query->execute();
+    }
     /**
      * @return bool
      * @description Change the privilege of the user an update the database
@@ -265,7 +306,7 @@ class UserModel
     public static function selectUsernameOrMail($usernameOrMail)
     {
         $pdo = DatabaseConnection::connect();
-        $query = $pdo->prepare('SELECT * FROM USER WHERE username = :value OR mail = :value');
+        $query = $pdo->prepare('SELECT * FROM USER WHERE UPPER(username) = UPPER(:value) OR UPPER(mail) = UPPER(:value)');
         $query->bindValue(':value', $usernameOrMail);
         return $query;
     }
@@ -345,17 +386,21 @@ class UserModel
 
     /**
      * @param $like
-     * @return false|PDOStatement
+     * @return array
      * @description Get all the users that have $like in their username from the database
      */
     public static function getAllUsersLike($like)
     {
         $pdo = DatabaseConnection::connect();
-        $query = $pdo->prepare('SELECT * FROM USER WHERE username LIKE :like');
+        $query = $pdo->prepare('SELECT * FROM USER WHERE UPPER(username) LIKE UPPER(:like) ORDER BY UPPER(username)');
         $query->bindValue(':like', '%' . $like . '%');
-
         $query->execute();
-        return $query;
+
+        $users = array();
+        while ($user = $query->fetch(PDO::FETCH_ASSOC)) {
+            $users[] = new UserModel($user['username']);
+        }
+        return $users;
     }
 
     /**

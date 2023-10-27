@@ -1,56 +1,86 @@
 <?php
 
 class Layout {
-private $title;
-private $content;
-public function __construct(string $title, string $content)
-{
-    $this->content = $content;
-    $this->title = $title;
-}
-public function show(): void {
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
-?><!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8"/>
-    <title><?= $this->title; ?></title>
-    <link href="style.css" rel="stylesheet"/>
-</head>
-<body>
-<header>
-    <form method="post" action="index.php">
-        <button>Accueil</button>
-        <input id="searchBar" type="search" name="searchLike" placeholder="billet, catégorie, commentaire" autocomplete="off">
-        <ul id="suggestions">
+    private $title;
+    private $content;
+    public function __construct(string $title, string $content)
+    {
+        $this->content = $content;
+        $this->title = $title;
+    }
 
-        </ul>
-        <button type="submit" name="action" value="toSearch">Rechercher</button>
-        <?php if (isset($_SESSION['suid'])) {
-            echo '<button type="submit" name="action" value="logout">Logout</button>';
-            if ($_SESSION['user']->getDeactivated() === 0) {
-                echo '<button type="submit" name="action" value="toPost">Poster</button>';
-            }
-            echo '<button type="submit" name="action" value="toAccountPage">Mon Profil</button>';
-            if ($_SESSION['user']->getAdministrator() and $_SESSION['user']->getDeactivated() === 0) {
-                echo '<button type="submit" name="action" value="toAdminPage">Admin</button>';
-            }
-        } else {
-            echo '<button type="submit" name="action" value="toLogin">Login</button>';
-            echo '<button type="submit" name="action" value="toRegister">Créer un compte</button>';
-        } ?>
-    </form>
-</header>
+    public function show(): void {
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
 
-<h1>Page de <?= $this->title; ?></h1>
-<?= $this->content; ?>
-<footer></footer>
-<script src="/_assets/lib/http_ajax.googleapis.com_ajax_libs_jquery_2.1.1_jquery.js"></script>
-<script src="/_assets/scripts/AllAutosuggest.js"></script>
-</body>
-</html>
-<?php
-}
+        ?>
+
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="utf-8"/>
+            <title><?= $this->title; ?></title>
+            <meta name = "description" content = "Ceci est la page d'accueil de notre site sous forme de mur social de type blog." >
+            <link rel = "stylesheet" type = "text/css" href = "_assets/style/style.css" >
+            <link rel = "icon" type = "favicon.ico" href = "_Assets/Images/favicon.ico" >
+        </head>
+        <body>
+
+        <!-- Menu permanent -->
+
+        <form class="nav" method="post" action="index.php">
+
+
+            <ul class="ul-nav">
+                <li><button class="accueil">Accueil</button></li>
+                <li class="deroulant"><a href="#">Recherche ▼</a>
+                    <ul class="sous">
+                        <li><input id="searchBar" type="search" name="searchLike" placeholder="billet, catégorie, commentaire" autocomplete="off"></li>
+                        <li><button class="button" type="submit" name="action" value="toSearch">Recherche</button></li>
+                    </ul>
+                </li>
+
+                <?php if (isset($_SESSION['suid'])) {
+
+                    echo '<li><button type="submit" name="action" value="logout">Logout</button></li>';
+                    if ($_SESSION['user']->getDeactivated() === 0) {
+                        echo '<li><button type="submit" name="action" value="toPost">Poster</button></li>';
+                    }
+                    echo '<li><button type="submit" name="action" value="toAccountPage">Mon Profil</button></li>';
+                    if ($_SESSION['user']->getAdministrator() and $_SESSION['user']->getDeactivated() === 0) {
+                        echo '<li><button type="submit" name="action" value="toAdminPage">Admin</button></li>';
+
+                    }
+                }else { ?>
+
+                <li class="deroulant"><a href="#">Compte ▼</a>
+                    <ul class="sous">
+                        <?php echo '<li><button class="button" type="submit" name="action" value="toLogin">Login</button></li>';
+                        echo '<li><button class="button" type="submit" name="action" value="toRegister">Créer un compte</button></li>';
+                        } ?>
+                    </ul>
+                </li>
+            </ul>
+
+        </form>
+        <h1><?= $this->title; ?></h1>
+
+
+        <?= $this->content; ?>
+
+        <footer>
+            <hr/>
+            <h3>Contact</h3>
+            <p>Pour nous contacter veuiller ecrire un mail a l'addresse mail suivante : zozo@zizi.com</p>
+        </footer>
+        <script src="/_assets/lib/http_ajax.googleapis.com_ajax_libs_jquery_2.1.1_jquery.js"></script>
+        <script src="/_assets/scripts/AllAutosuggest.js"></script>
+        </body>
+        </html>
+
+
+        <?php
+
+    }
 }

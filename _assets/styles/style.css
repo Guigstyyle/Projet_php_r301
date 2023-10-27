@@ -1,0 +1,189 @@
+
+body {
+
+    background: yellowgreen;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    font-family: Arial sans-serif;
+    flex-direction: column;
+
+}
+
+
+*{
+    font-family: sans-serif;
+    box-sizing: border-box;
+
+}
+
+/* Spécificités du formulaire */
+form.nav {
+
+    width: 100%;
+    height: 72px;
+    margin: 0 auto;
+    background-color: white;
+    position: sticky;
+    top: 0px;
+}
+
+/* Spécificités du menu */
+form.nav ul.ul-nav {
+
+    display: flex;
+    justify-content: space-evenly;
+    align-content: center;
+    list-style-type: none;
+    padding-left: 0;
+}
+form.nav ul li {
+    float: left;
+    width: 100%;
+    list-style-type: none;
+    text-align: center;
+    position: relative;
+}
+
+
+form.nav button{
+
+    text-decoration: none;
+    color: black;
+    background-color: white;
+    width: 100%;
+    font-size: 16px;
+    border-radius: 0;
+    border-bottom: 2px solid transparent;
+    padding: 10px 0px;
+}
+
+form.nav a {
+    display: block;
+    text-decoration: none;
+    color: black;
+    border-bottom: 2px solid transparent;
+    padding: 10px 0px;
+}
+
+.nav button:hover {
+    color: orange;
+    border-bottom: 2px solid gold;
+}
+
+.nav a:hover {
+    color: orange;
+    border-bottom: 2px solid gold;
+}
+
+.sous {
+    display: none;
+    box-shadow: 0px 1px 2px #CCC;
+    background-color: white;
+    position: absolute;
+    width: 100%;
+    padding-left: 0;
+    z-index: 1000;
+
+}
+
+.nav > ul li:hover .sous{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+.sous li {
+    width: 100%;
+    text-align: center;
+}
+
+.sous .button {
+    padding: 10px;
+    border-bottom: none;
+    display: block;
+    margin: 0;
+}
+
+.sous .button:hover{
+    border-bottom: none;
+    background-color: RGBa(200,200,200,0.1);
+}
+
+
+button {
+
+    background: #555;
+    padding: 5px;
+    margin: 2px;
+    color: #fff;
+    border-radius: 5px;
+    border: none;
+}
+button:hover {
+    opacity: .7;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+input{
+    display: block;
+    border: 2px solid #ccc;
+    width: 95%;
+    padding: 10px;
+    margin: 10px auto;
+    border-radius: 5px;
+}
+label {
+    color: #888;
+    font-size: 18px;
+    padding: 10px;
+}
+
+.error {
+    background: #F2DEDE;
+    color: #A94442;
+    padding: 10px;
+    width: 95%;
+    border-radius: 5px;
+    margin: 20px auto;
+}
+
+.success {
+    background: #D4EDDA;
+    color: #40754C;
+    padding: 10px;
+    width: 95%;
+    border-radius: 5px;
+    margin: 20px auto;
+}
+
+h1 {
+    text-align: center;
+    color: #fff;
+}
+
+
+
+footer {
+    position: static;
+    bottom: 0;
+    width: 100%;
+    height: auto;
+    text-align: center;
+
+}
+
+hr {
+    border: none;
+    border-top: 2px solid #333;
+    color: #333;
+    overflow: visible;
+    text-align: center;
+    height: 2px;
+}

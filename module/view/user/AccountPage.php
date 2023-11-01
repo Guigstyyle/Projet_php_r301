@@ -8,43 +8,40 @@ class AccountPage
         $mail = $user->getMail();
         $lastconnection = date('d/m/y H:i',strtotime($user->getLastconnection()));
         return <<<HTML
-<label>Dernière connexion : {$lastconnection}</label>
-<form method="post" action="index.php">
-    <label>
-        Nom d'utilisateur :<br>
-        <input type="text" name="username" value="{$username}" placeholder="Nom d'utilisateur" maxlength="100"><br>
-    </label>
-    <label>
-        Pseudo :<br>
-        <input type="text" name="frontname" value="{$frontname}" placeholder="Pseudo" maxlength="255"><br>
-    </label>
-    <label>
-        Adresse mail :<br>
-        <input type="text" name="mail" value="{$mail}" placeholder="adresse@exemple.com" maxlength="255"><br>
-    </label>
-    <label>
-        Mot de passe :<br>
-        <input type="password" name="password" placeholder="Mot de passe" maxlength="255"><br>
-    </label>
-    <button type="submit" name="action" value="changeInformations">Enregistrer</button><br>
+<small>Dernière connexion : {$lastconnection}</small>
+<form class="userForm" id="editProfilForm" method="post" action="index.php">
+
+    <label for="username">Nom d'utilisateur :</label>
+    <input id="username" type="text" name="username" placeholder="Nom d'utilisateur" value="{$username}" maxlength="100">
     
+    <label for="frontname">Pseudo :</label>
+    <input id="frontname" type="text" name="frontname" placeholder="Pseudo" value="{$frontname}" maxlength="255">
+    
+    <label for="mail">Adresse mail :</label>
+    <input id="mail" type="text" name="mail" placeholder="adresse@exemple.com" value="{$mail}" maxlength="255">
+  
+
+    <label for="password">Mot de passe* :</label>
+    <input id="password" type="password" name="password" placeholder="Mot de passe" maxlength="255">
+    <div class="buttonContainer">
+        <button type="submit" name="action" value="changeInformations">Enregistrer</button>
+    </div>
 </form>
 
 <label>Changer de mot passe</label>
-<form method="post" action="index.php">
-    <label>
-        Mot de passe actuel :<br>
-        <input type="password" name="password" placeholder="Mot de passe actuel" maxlength="255"><br>
-    </label>
-    <label>
-        Nouveau mot de passe :<br>
-        <input type="password" name="newPassword" placeholder="Nouveau mot de passe" maxlength="255"><br>
-    </label>
-    <label>
-        Confirmation du nouveau mot de passe :<br>
-        <input type="password" name="newPasswordConfirm" placeholder="Confirmation mot de passe" maxlength="255"><br>
-    </label>
-    <button type="submit" name="action" value="changePassword">Changer de mot de passe</button>
+<form class="userForm" id="changePasswordForm" method="post" action="index.php">
+    <label for="password">Mot de passe actuel :</label>
+    <input type="password" name="password" placeholder="Mot de passe actuel" maxlength="255">
+ 
+    <label for="newPassword">Nouveau mot de passe :</label>
+    <input id="newPassword" type="password" name="newPassword" placeholder="Mot de passe" maxlength="255">
+    
+    <label for="verifNewPassword">Confirmation du nouveau mot de passe:</label>
+    <input id="verifNewPassword" type="password" name="newPasswordConfirm" placeholder="Même mot de passe" maxlength="255">
+    
+    <div class="buttonContainer">
+        <button type="submit" name="action" value="changePassword">Changer de mot de passe</button>
+    </div>
 </form>
 HTML;
     }

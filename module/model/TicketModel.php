@@ -56,6 +56,18 @@ class TicketModel
         $this->addCategories($categories);
     }
 
+    public function __construct5($title, $message, $username, $categories, $mentions)
+    {
+
+        $this->constructOnNewTicket($title, $message, $username);
+
+        if (isset($categories)) {
+            $this->addCategories($categories);
+        }
+
+        $this->addMentions($mentions);
+    }
+
     /**
      * @param $title
      * @param $message
@@ -95,7 +107,6 @@ class TicketModel
 
     public function addCategories($categories)
     {
-        $pdo = DatabaseConnection::connect();
         foreach ($categories as $category) {
             $this->addCategory($category);
         }
@@ -115,13 +126,57 @@ class TicketModel
         $query->execute();
     }
 
+    public function addMentions($mentions)
+    {
+        foreach ($mentions as $mention) {
+            $this->addMention($mention);
+        }
+    }
+
+    public function addMention($mention)
+    {
+        $pdo = DatabaseConnection::connect();
+        $query = $pdo->prepare('INSERT INTO MENTIONTICKET (username,idticket) VALUE (:username,:idticket)');
+        $query->bindValue(':username', $mention);
+        $query->bindValue(':idticket', $this->idTicket);
+        $query->execute();
+    }
+
+    public function updateMentions($mentions)
+    {
+        $this->removeMentions();
+        $this->addMentions($mentions);
+    }
+
+    public function removeMentions()
+    {
+        $pdo = DatabaseConnection::connect();
+        $query = $pdo->prepare('DELETE FROM MENTIONTICKET WHERE :idticket = idticket');
+        $query->bindValue(':idticket', $this->idTicket);
+        $query->execute();
+    }
+
     public function getFrontnameByUsername(): string
     {
-        if (!isset($this->username)){
+        if (!isset($this->username)) {
             return 'Compte supprimé';
         }
         $user = new UserModel($this->username);
         return $user->getFrontname();
+    }
+
+    public function getMentions()
+    {
+        $pdo = DatabaseConnection::connect();
+        $query = $pdo->prepare('SELECT * FROM MENTIONTICKET WHERE idticket = :idTicket');
+        $query->bindValue(':idTicket', $this->idTicket);
+        $query->execute();
+        $mentions = array();
+        while ($mention = $query->fetch(PDO::FETCH_ASSOC)) {
+
+            $mentions[] = $mention['username'];
+        }
+        return $mentions;
     }
 
     public function getComments()

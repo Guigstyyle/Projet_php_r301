@@ -10,38 +10,52 @@ class EditTicket
         $title = $ticket->getTitle();
         $message = $ticket->getMessage();
         $id = $ticket->getIdTicket();
+        $mentions = $ticket->getMentions();
         $categories = $ticket->getCategories();
         $content = '
-<form method="post" action="index.php">
-    <input type="hidden" name="idTicket" value="'.$id.'"><br>
-    <label>
-        Titre<br>
-        <input type="text" name="title" placeholder="Nom" value="'.$title.'" maxlength="100"><br>
-    </label>
-    <label>
-        Message<br>
-        <textarea name="message" placeholder="Message" maxlength="3000">'.$message.'</textarea><br>
-    </label>
-        <label>
-        Catégoires:<br>
-        <input id="categorySearch" type="search" name="category" placeholder="Catégorie" autocomplete="off"><br>
-        <ul id="suggestions">
-            
-        </ul>
-        <label>Catégories ajoutées :</label>
-        <ul id="addedCategories">
-        ';
+<form class="userForm" method="post" action="index.php">
+    <input type="hidden" name="idTicket" value="' . $id . '">
+    <label for="title">Titre</label>
+    <input id="title" type="text" name="title" placeholder="Nom" value="' . $title . '" maxlength="100">
+    
+    <label for="message">Message</label>
+    <textarea id="message" name="message" placeholder="Message" maxlength="3000">' . $message . '</textarea>
+   
+    <label for="userSearch">Mentions:</label>
+    <input class="searchBar" id="userSearch" type="search" name="user" placeholder="Utilisateur" autocomplete="off">
+    <ul class="suggestions" id="userSuggestions">
+        
+    </ul>
+    <label for="addedUsers">Utilisateurs mentioné :</label>
+    <ul class="added" id="addedUsers">
+    ';
+        foreach ($mentions as $mention) {
+            $content .= '<li>' . $mention . '<input type="hidden" name="selectedUsers[]" value="' . $mention . '"></li>';
+        }
+        $content .= '
+    </ul>
+
+    <label for="categorySearch">Catégories:</label>
+    <input class="searchBar" id="categorySearch" type="search" name="category" placeholder="Catégorie" autocomplete="off">
+    <ul class="suggestions" id="categorySuggestions">
+        
+    </ul>
+    <label for="addedCategories">Catégories ajoutées :</label>
+    <ul class="added" id="addedCategories">
+    ';
         foreach ($categories as $category) {
-            $content .= '<li>'.$category->getName().'<input type="hidden" name="selectedCategories[]" value="'.$category->getName().'"></li>';
+            $content .= '<li>' . $category->getName() . '<input type="hidden" name="selectedCategories[]" value="' . $category->getName() . '"></li>';
         }
 
         $content .= '
-        </ul>
-    </label>
-    <button type="submit" name="action" value="modifyTicket">Publier</button>
+    </ul>
+    <div class="buttonContainer">
+        <button type="submit" name="action" value="modifyTicket">Publier</button>
+    </div>
 </form>
 <script src="/_assets/lib/http_ajax.googleapis.com_ajax_libs_jquery_2.1.1_jquery.js"></script>
 <script src="/_assets/scripts/CategoryAutosuggest.js"></script>
+<script src="/_assets/scripts/UserAutosuggest.js"></script>
 ';
         return $content;
     }

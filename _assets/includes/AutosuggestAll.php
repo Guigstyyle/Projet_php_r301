@@ -13,10 +13,8 @@ if (isset($_GET['query'])) {
     while ($result = $query->fetch(PDO::FETCH_ASSOC)){
         $suggestions .= '
 <li>
-    <form method="post" action="index.php">
-        <input type="hidden" name="idcategory" value="'.$result["idcategory"].'">
-        <button type="submit" name="action" value="showCategory">'.$result["name"].'</button>
-    </form>
+    <input type="hidden" name="idcategory" value="'.$result["idcategory"].'">
+    <button type="submit" name="action" value="showCategory">'.$result["name"].'</button>
 </li>';
     }
     $suggestions .='</ul>';
@@ -29,10 +27,8 @@ if (isset($_GET['query'])) {
     while ($result = $query->fetch(PDO::FETCH_ASSOC)){
         $suggestions .= '
 <li>
-    <form method="post" action="index.php">
-        <input type="hidden" name="idticket" value="'.$result["idticket"].'">
-        <button type="submit" name="action" value="showTicket">'.$result["title"].'</button>
-    </form>
+    <input type="hidden" name="idticket" value="'.$result["idticket"].'">
+    <button type="submit" name="action" value="showTicket">'.$result["title"].'</button>
 </li>';
     }
     $suggestions .='</ul>';
@@ -45,10 +41,8 @@ if (isset($_GET['query'])) {
     while ($result = $query->fetch(PDO::FETCH_ASSOC)){
         $suggestions .= '
 <li>
-    <form method="post" action="index.php">
-        <input type="hidden" name="idcomment" value="'.$result["idcomment"].'">
-        <button type="submit" name="action" value="showComment">'.$result["text"].'</button>
-    </form>
+    <input type="hidden" name="idcomment" value="'.$result["idcomment"].'">
+    <button type="submit" name="action" value="showComment">'.$result["text"].'</button>
 </li>';
 
     }

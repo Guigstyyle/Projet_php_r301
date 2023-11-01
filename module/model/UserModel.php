@@ -218,6 +218,32 @@ class UserModel
     {
         return $this->deactivated;
     }
+    public function getTicketsMentions(): array
+    {
+        $pdo = DatabaseConnection::connect();
+        $query = $pdo->prepare('SELECT idticket FROM MENTIONTICKET WHERE UPPER(username) = UPPER(:username)');
+        $query->bindValue(':username', $this->username);
+        $query->execute();
+
+        $tickets = array();
+        while ($ticket = $query->fetch(PDO::FETCH_ASSOC)) {
+            $tickets[] = new TicketModel($ticket['idticket']);
+        }
+        return $tickets;
+    }
+    public function getCommentsMentions(): array
+    {
+        $pdo = DatabaseConnection::connect();
+        $query = $pdo->prepare('SELECT idcomment FROM MENTIONCOMMENT WHERE UPPER(username) = UPPER(:username)');
+        $query->bindValue(':username', $this->username);
+        $query->execute();
+
+        $comments = array();
+        while ($comment = $query->fetch(PDO::FETCH_ASSOC)) {
+            $comments[] = new CommentModel($comment['idcomment']);
+        }
+        return $comments;
+    }
     public function setUsername($username){
         $pdo = DatabaseConnection::connect();
         $query = $pdo->prepare('UPDATE USER SET username = :newusername WHERE username = :username');

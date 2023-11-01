@@ -17,6 +17,7 @@ require_once 'module/controller/LogoutController.php';
 require_once 'module/controller/CommentController.php';
 require_once 'module/controller/SearchController.php';
 require_once 'module/controller/ForgotPasswordController.php';
+require_once 'module/controller/MentionPageController.php';
 
 try {
     if (isset($_POST['action'])) {
@@ -78,6 +79,9 @@ try {
             $action === 'forgotPassword'){
             (new ForgotPasswordController())->execute();
         }
+        if ($action === 'toMentionPage'){
+            (new MentionPageController())->execute();
+        }
     } else {
         (new HomepageController())->execute();
     }
@@ -87,10 +91,9 @@ try {
 }
 /**
  * a faire :
- * mentions (mentionner d'autres users, donc changer les pages de commentaire et de billet et faire un page ou chque user voit ses mentions)
- * validation mail de creation du compte,
- * mot de passe oublié,
+ * validation mail de creation du compte (si ya du temps),
  * faire la doc,
  * Gérer les erreurs partout
+ * faire en sorte que les usernames de puissent pas contenir n'importe quelle caracteère
  * Une page de recherche avancé (si ya du temps)
  */

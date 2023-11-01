@@ -19,7 +19,15 @@ class Post
                 $categories .= $category->getName() . '<br>';
             }
         }
+        $requestMentions = $ticket->getMentions();
+        $mentions = '';
+        if (isset($requestMentions)) {
+            foreach ($requestMentions as $mention) {
+                $mentions .= $mention . '<br>';
+            }
+        }
         $comments = $ticket->getComments();
+
         $content = '';
         if (isset($_SESSION['suid']) and $_SESSION['user']->getDeactivated() === 0) {
             if ($username === $_SESSION['user']->getUsername()) {
@@ -29,7 +37,7 @@ class Post
                 $content .= '<button type="submit" name="action" value="deleteTicket">Supprimer</button> <br>
 </form>';
             }
-            if ($_SESSION['user']->getAdministrator() === 1) {
+            elseif ($_SESSION['user']->getAdministrator() === 1) {
                 $content .= '<form method="post" action="index.php">
     <input type="hidden" name="idticket" value="' . $id . '">';
                 $content .= '<button type="submit" name="action" value="deleteTicket">Supprimer</button> <br>
@@ -44,18 +52,32 @@ class Post
 ' . $message . ' <br>
 </label>
 <label>
+Mentions :<br>
+' . $mentions . '
+</label>
+<label>
 Catégories :<br>
 ' . $categories . '
 </label>';
         if (isset($_SESSION['suid'])) {
             $content .= '
-<form method="post" action="index.php">
-    <label>
-        Message : <br>
-        <textarea name="text" placeholder="Commentaire" maxlength="3000"></textarea><br>
-        <button type="submit" name="action" value="comment">Commenter</button><br>
-        <input type="hidden" name="idticket" value="' . $id . '">
-    </label>
+<form class="userForm" method="post" action="index.php">
+    <label for="message">Message :</label>
+    <textarea id="message" name="text" placeholder="Commentaire" maxlength="3000"></textarea>
+    <input type="hidden" name="idticket" value="' . $id . '">
+
+    <label for="userSearch">Mentions:</label>
+    <input class="searchBar" id="userSearch" type="search" name="user" placeholder="Utilisateur" autocomplete="off">
+    <ul class="suggestions" id="userSuggestions">
+        
+    </ul>
+    <label for="addedUsers">Utilisateurs mentioné :</label>
+    <ul class="added" id="addedUsers">
+    
+    </ul>
+    <div class="buttonContainer">
+        <button type="submit" name="action" value="comment">Commenter</button>
+    </div>
 </form>';
         }
         $content .= '
@@ -73,8 +95,17 @@ Catégories :<br>
             $content .= '<label>Commentaire recherché:</label><br>' . PHP_EOL .
                 $searchedComment->getFrontnameByUsername() . ' :<br>' . PHP_EOL . '
 <label>le : ' . date('d/m/Y H\hi', strtotime($searchedComment->getDate())) . '</label><br>
-            <p>' . $searchedComment->getText() . '</p><br>';
-            if (isset($_SESSION['suid']) and $_SESSION['user']->getDeactivated() === 0) {
+            <p>' . $searchedComment->getText() . '</p><br>
+
+<ul class="suggestions userSuggestions ">
+
+</ul>
+<label for="">Mentions :</label><br>
+<ul id="mentions" class=" added addedUsers">';
+            if (isset($_SESSION['suid']) and
+                $_SESSION['user']->getDeactivated() === 0 and
+                ($_SESSION['user']->getUsername() === $searchedComment->getUsername() or
+                    $_SESSION['user']->getAdministrator() === 1)) {
                 $content .= $this->displayButtons($searchedComment, $ticket);
             }
             $content .= '</section>';
@@ -92,15 +123,29 @@ Catégories :<br>
 
             $content .= $comment->getFrontnameByUsername() . ' :<br>' . PHP_EOL . '
  <label>le : ' . date('d/m/Y H\hi', strtotime($comment->getDate())) . '</label><br>
-<p>' . $comment->getText() . '</p><br>';
-            if (isset($_SESSION['suid']) and $_SESSION['user']->getDeactivated() === 0) {
+<p>' . $comment->getText() . '</p><br>
+
+<ul class="suggestions userSuggestions">
+
+</ul>
+<label>Mentions :</label><br>
+<ul class="added addedUsers">';
+            foreach ($comment->getMentions() as $mention){
+                $content .= '<li>'.$mention.'<input type="hidden" name="selectedUsers[]" value="'.$mention.'"></li>';
+            }
+            $content.='</ul>';
+            if (isset($_SESSION['suid']) and
+                $_SESSION['user']->getDeactivated() === 0 and
+                ($_SESSION['user']->getUsername() === $comment->getUsername() or
+                    $_SESSION['user']->getAdministrator() === 1)) {
                 $content .= $this->displayButtons($comment, $ticket);
             }
             $content .= '</li>';
         }
         $content .= '</ul>
 <script src="/_assets/lib/http_ajax.googleapis.com_ajax_libs_jquery_2.1.1_jquery.js"></script>
-<script src="/_assets/scripts/EditComment.js"></script>';
+<script src="/_assets/scripts/EditComment.js"></script>
+<script src="/_assets/scripts/UserAutosuggest.js"></script>';
         return $content;
     }
 

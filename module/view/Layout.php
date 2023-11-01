@@ -17,13 +17,12 @@ class Layout {
         ?>
 
         <!DOCTYPE html>
-        <html>
+        <html lang="fr">
         <head>
             <meta charset="utf-8"/>
             <title><?= $this->title; ?></title>
             <meta name = "description" content = "Ceci est la page d'accueil de notre site sous forme de mur social de type blog." >
-            <link rel = "stylesheet" type = "text/css" href = "_assets/style/style.css" >
-            <link rel = "icon" type = "favicon.ico" href = "_Assets/Images/favicon.ico" >
+            <link rel = "stylesheet" type = "text/css" href = "_assets/styles/style.css" >
         </head>
         <body>
 
@@ -38,6 +37,7 @@ class Layout {
                     <ul class="sous">
                         <li><input id="searchBar" type="search" name="searchLike" placeholder="billet, catégorie, commentaire" autocomplete="off"></li>
                         <li><button class="button" type="submit" name="action" value="toSearch">Recherche</button></li>
+                        <li><ul id="suggestionsAll"></ul></li>
                     </ul>
                 </li>
 
@@ -48,6 +48,7 @@ class Layout {
                         echo '<li><button type="submit" name="action" value="toPost">Poster</button></li>';
                     }
                     echo '<li><button type="submit" name="action" value="toAccountPage">Mon Profil</button></li>';
+                    echo '<li><button type="submit" name="action" value="toMentionPage">Mes mentions</button></li>';
                     if ($_SESSION['user']->getAdministrator() and $_SESSION['user']->getDeactivated() === 0) {
                         echo '<li><button type="submit" name="action" value="toAdminPage">Admin</button></li>';
 
@@ -56,11 +57,10 @@ class Layout {
 
                 <li class="deroulant"><a href="#">Compte ▼</a>
                     <ul class="sous">
-                        <?php echo '<li><button class="button" type="submit" name="action" value="toLogin">Login</button></li>';
-                        echo '<li><button class="button" type="submit" name="action" value="toRegister">Créer un compte</button></li>';
-                        } ?>
+                        <li><button class="button" type="submit" name="action" value="toLogin">Login</button></li>
+                        <li><button class="button" type="submit" name="action" value="toRegister">Créer un compte</button></li>
                     </ul>
-                </li>
+                </li> <?php } ?>
             </ul>
 
         </form>

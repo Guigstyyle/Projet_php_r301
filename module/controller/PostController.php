@@ -55,6 +55,12 @@ class PostController
         $ticket = new TicketModel($id);
         $ticket->setTitle($title);
         $ticket->setMessage($message);
+        if (isset($_POST['selectedUsers'])){
+            $ticket->updateMentions($_POST['selectedUsers']);
+        }
+        else{
+            $ticket->removeMentions();
+        }
         if (isset($_POST['selectedCategories'])){
             $ticket->updateCategories($_POST['selectedCategories']);
         }
@@ -72,10 +78,22 @@ class PostController
             $username = $_SESSION['user']->getUsername();
             if (isset($_POST['selectedCategories'])) {
                 $categories = $_POST['selectedCategories'];
-                $ticket = new TicketModel($title,$message,$username,$categories);
+                if (!isset($_POST['selectedUsers'])){
+                    $ticket = new TicketModel($title,$message,$username,$categories);
+                }
+                else{
+                    $mentionedUsers = $_POST['selectedUsers'];
+                    $ticket = new TicketModel($title,$message,$username,$categories,$mentionedUsers);
+                }
             }
             else{
-                $ticket = new TicketModel($title,$message,$username);
+                if (isset($_POST['selectedUsers'])){
+                    $mentionedUsers = $_POST['selectedUsers'];
+                    $ticket = new TicketModel($title,$message,$username,null,$mentionedUsers);
+                }
+                else{
+                    $ticket = new TicketModel($title,$message,$username);
+                }
             }
             return $ticket;
         }
@@ -105,6 +123,14 @@ class PostController
                 foreach ($categories as $category) {
                     if(!CategoryModel::nameExists($category)){
                         throw new Exception('Catégorie(s) invalide(s).');
+                    }
+                }
+            }
+            if (isset($_POST['selectedUsers'])){
+                $users = $_POST['selectedUsers'];
+                foreach ($users as $username){
+                    if(!UserModel::usernameExists($username)){
+                        throw new Exception('Utilisateur(s) introuvable(s)');
                     }
                 }
             }

@@ -6,12 +6,12 @@ $(document).ready(function () {
             url: '_assets/includes/AutosuggestCategory.php',
             data: {query: query},
             success: function (data) {
-                $('#suggestions').html(data);
+                $('#categorySuggestions').html(data);
             }
         });
     });
 });
-$('#suggestions').on('click','li', function(){
+$('#categorySuggestions').on('click','li', function(){
     if ($('#addedCategories li:contains(' + $(this).text() + ')').length === 0){
         $('#addedCategories').append('<li>'+$(this).text()+'<input type="hidden" name="selectedCategories[]" value="'+$(this).text()+'"></li>');
     }

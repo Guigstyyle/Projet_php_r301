@@ -16,40 +16,42 @@ class AdminPage
     {
         return <<<HTML
 <section>
-    <form method="post" action="index.php">
-        <button type="submit" name="action" value="toCreateCategory">Créer une catégorie</button><br>
-        <label>
-            Rechercher une catégorie<br>
-            <input type="text" name="categoryNameLike"><br>
-        </label>
-        <button type="submit" name="action" value="toSearchCategory">Rechercher une catégorie</button>
+    <form class="userForm" method="post" action="index.php">
+        <div class="buttonContainer">
+            <button type="submit" name="action" value="toCreateCategory">Créer une catégorie</button>
+        </div>
+        <label for="searchCategory">Rechercher une catégorie</label>
+        <input id="searchCategory" type="search" name="categoryNameLike" placeholder="catégorie">
+        <div class="buttonContainer">
+            <button type="submit" name="action" value="toSearchCategory">Rechercher une catégorie</button>
+        </div>
     </form>
 </section>
 <section>
-    <form method="post" action="index.php">
-        <label>
-            Rechercher un utilisateur<br>
-            <input type="text" name="usernameLike"><br>
-        </label>
-        <button type="submit" name="action" value="toSearchUser">Rechercher un utilisateur</button>
+    <form class="userForm" method="post" action="index.php">
+        <label for="searchUser">Rechercher un utilisateur</label>
+        <input id="searchUser" type="search" name="usernameLike" placeholder="Username">
+        <div class="buttonContainer">
+            <button type="submit" name="action" value="toSearchUser">Rechercher un utilisateur</button>
+        </div>
     </form>
 </section>
 <section>
-    <form method="post" action="index.php">
-        <label>
-            Rechercher un billet<br>
-            <input type="text" name="titleOrMessageLike"><br>
-        </label>
-        <button type="submit" name="action" value="toSearchTicket">Rechercher un billet</button>
+    <form class="userForm" method="post" action="index.php">
+        <label for="searchTicket">Rechercher un billet</label>
+        <input id="searchTicket" type="search" name="titleOrMessageLike" placeholder="Billet (titre ou message)">
+        <div class="buttonContainer">
+            <button type="submit" name="action" value="toSearchTicket">Rechercher un billet</button>
+        </div>
     </form>
 </section>
 <section>
-    <form method="post" action="index.php">
-        <label>
-            Rechercher un commentaire<br>
-            <input type="text" name="textLike"><br>
-        </label>
-        <button type="submit" name="action" value="toSearchComment">Rechercher un commentaire</button>
+    <form class="userForm" method="post" action="index.php">
+        <label for="searchComment">Rechercher un commentaire</label>
+        <input id="searchComment" type="search" name="textLike" placeholder="Commentaire">
+        <div class="buttonContainer">
+            <button type="submit" name="action" value="toSearchComment">Rechercher un commentaire</button>
+        </div>
     </form>
 </section>
 HTML;

@@ -32,20 +32,20 @@ class CommentController
             $ticket = new TicketModel($_POST['idticket']);
             (new Post())->show($ticket);
         }
-        if ($action === 'toSearchComment'){
+        if ($action === 'toSearchComment') {
             $comments = CommentModel::getAllCommentsLike($_POST['textLike']);
             (new SearchComment())->show($comments);
         }
-        if ($action === 'showComment'){
+        if ($action === 'showComment') {
             $comment = new CommentModel($_POST['idcomment']);
             $ticket = new TicketModel($comment->getIdTicket());
-            (new Post())->show($ticket,$comment);
+            (new Post())->show($ticket, $comment);
 
         }
     }
 
     /**
-     * @todo verify the form (the connected user posted)
+     * @todo verify the form (the connected user posted correct mentions as well)
      */
     public function modifyComment(): bool
     {
@@ -53,6 +53,12 @@ class CommentController
         $text = ($_POST['modifiedComment']);
         $comment = new CommentModel($id);
         $comment->setText($text);
+
+        if (isset($_POST['selectedUsers'])) {
+            $comment->updateMentions($_POST['selectedUsers']);
+        } else {
+            $comment->removeMentions();
+        }
         return true;
 
     }
@@ -65,7 +71,12 @@ class CommentController
         $user = $_SESSION['user'];
         $text = $_POST['text'];
         $idTicket = $_POST['idticket'];
-        $comment = new CommentModel($user->getUsername(), $text, $idTicket);
+        $mentions = $_POST['selectedUsers'];
+        if (isset($mentions)) {
+            $comment = new CommentModel($user->getUsername(), $text, $idTicket, $mentions);
+        } else {
+            $comment = new CommentModel($user->getUsername(), $text, $idTicket);
+        }
         return $comment;
 
     }

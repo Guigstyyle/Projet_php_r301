@@ -5,13 +5,14 @@ class ForgotPassword
     public function setContent(){
         return <<<HTML
 
-<form method="post" action="index.php">
-    Saisissez votre adresse mail pour recevoir un mot de passe temporaire;
-    <label>
-        Adresse mail :<br>
-        <input type="email" name="mail" placeholder="adresse@exemple.com">
-    </label>
-    <button type="submit" name="action" value="forgotPassword">Envoyer</button>
+<form class="userForm" method="post" action="index.php">
+    Saisissez votre adresse mail pour recevoir un mot de passe temporaire
+    <label for="mail">Adresse mail :</label>
+    <input id="mail" type="email" name="mail" placeholder="adresse@exemple.com">
+    
+    <div class="buttonContainer">
+        <button type="submit" name="action" value="forgotPassword">Envoyer</button>
+    </div>
 </form>
 HTML;
 

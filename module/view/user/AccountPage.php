@@ -2,11 +2,12 @@
 
 class AccountPage
 {
-    public function setContent($user){
+    public function setContent($user): string
+    {
         $username = $user->getUsername();
         $frontname = $user->getFrontname();
         $mail = $user->getMail();
-        $lastconnection = date('d/m/y H:i',strtotime($user->getLastconnection()));
+        $lastconnection = date('d/m/y H:i', strtotime($user->getLastconnection()));
         return <<<HTML
 <small>Dernière connexion : {$lastconnection}</small>
 <form class="userForm" id="editProfilForm" method="post" action="index.php">
@@ -46,11 +47,12 @@ class AccountPage
 HTML;
     }
 
-    public function show(){
+    public function show()
+    {
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
         }
         $user = $_SESSION['user'];
-        (new Layout('compte de '.$user->getUsername(),$this->setContent($user)))->show();
+        (new Layout('compte de ' . $user->getUsername(), $this->setContent($user)))->show();
     }
 }

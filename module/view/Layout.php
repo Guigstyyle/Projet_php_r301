@@ -1,15 +1,18 @@
 <?php
 
-class Layout {
+class Layout
+{
     private $title;
     private $content;
+
     public function __construct(string $title, string $content)
     {
         $this->content = $content;
         $this->title = $title;
     }
 
-    public function show(): void {
+    public function show(): void
+    {
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
         }
@@ -21,8 +24,9 @@ class Layout {
         <head>
             <meta charset="utf-8"/>
             <title><?= $this->title; ?></title>
-            <meta name = "description" content = "Ceci est la page d'accueil de notre site sous forme de mur social de type blog." >
-            <link rel = "stylesheet" type = "text/css" href = "_assets/styles/style.css" >
+            <meta name="description"
+                  content="Ceci est la page d'accueil de notre site sous forme de mur social de type blog.">
+            <link rel="stylesheet" type="text/css" href="_assets/styles/style.css">
         </head>
         <body>
 
@@ -32,12 +36,19 @@ class Layout {
 
 
             <ul class="ul-nav">
-                <li><button class="accueil">Accueil</button></li>
+                <li>
+                    <button class="accueil">Accueil</button>
+                </li>
                 <li class="deroulant"><a href="#">Recherche ▼</a>
                     <ul class="sous">
-                        <li><input id="searchBar" type="search" name="searchLike" placeholder="billet, catégorie, commentaire" autocomplete="off"></li>
-                        <li><button class="button" type="submit" name="action" value="toSearch">Recherche</button></li>
-                        <li><ul id="suggestionsAll"></ul></li>
+                        <li><input id="searchBar" type="search" name="searchLike"
+                                   placeholder="billet, catégorie, commentaire" autocomplete="off"></li>
+                        <li>
+                            <button class="button" type="submit" name="action" value="toSearch">Recherche</button>
+                        </li>
+                        <li>
+                            <ul id="suggestionsAll"></ul>
+                        </li>
                     </ul>
                 </li>
 
@@ -53,14 +64,19 @@ class Layout {
                         echo '<li><button type="submit" name="action" value="toAdminPage">Admin</button></li>';
 
                     }
-                }else { ?>
+                } else { ?>
 
-                <li class="deroulant"><a href="#">Compte ▼</a>
-                    <ul class="sous">
-                        <li><button class="button" type="submit" name="action" value="toLogin">Login</button></li>
-                        <li><button class="button" type="submit" name="action" value="toRegister">Créer un compte</button></li>
-                    </ul>
-                </li> <?php } ?>
+                    <li class="deroulant"><a href="#">Compte ▼</a>
+                        <ul class="sous">
+                            <li>
+                                <button class="button" type="submit" name="action" value="toLogin">Login</button>
+                            </li>
+                            <li>
+                                <button class="button" type="submit" name="action" value="toRegister">Créer un compte
+                                </button>
+                            </li>
+                        </ul>
+                    </li> <?php } ?>
             </ul>
 
         </form>

@@ -36,8 +36,7 @@ class Post
     <button type="submit" name="action" value="toModifyTicket">Modifier</button>';
                 $content .= '<button type="submit" name="action" value="deleteTicket">Supprimer</button> <br>
 </form>';
-            }
-            elseif ($_SESSION['user']->getAdministrator() === 1) {
+            } elseif ($_SESSION['user']->getAdministrator() === 1) {
                 $content .= '<form method="post" action="index.php">
     <input type="hidden" name="idticket" value="' . $id . '">';
                 $content .= '<button type="submit" name="action" value="deleteTicket">Supprimer</button> <br>
@@ -130,10 +129,10 @@ Catégories :<br>
 </ul>
 <label>Mentions :</label><br>
 <ul class="added addedUsers">';
-            foreach ($comment->getMentions() as $mention){
-                $content .= '<li>'.$mention.'<input type="hidden" name="selectedUsers[]" value="'.$mention.'"></li>';
+            foreach ($comment->getMentions() as $mention) {
+                $content .= '<li>' . $mention . '<input type="hidden" name="selectedUsers[]" value="' . $mention . '"></li>';
             }
-            $content.='</ul>';
+            $content .= '</ul>';
             if (isset($_SESSION['suid']) and
                 $_SESSION['user']->getDeactivated() === 0 and
                 ($_SESSION['user']->getUsername() === $comment->getUsername() or

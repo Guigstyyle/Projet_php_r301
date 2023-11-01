@@ -1,14 +1,16 @@
 <?php
 require_once __DIR__ . '/../model/UserModel.php';
 require_once __DIR__ . '/../view/user/ForgotPassword.php';
+
 class ForgotPasswordController
 {
-    public function execute(){
+    public function execute()
+    {
         $action = $_POST['action'];
-        if ($action === 'toForgotPassword'){
+        if ($action === 'toForgotPassword') {
             (new ForgotPassword())->show();
         }
-        if ($action === 'forgotPassword'){
+        if ($action === 'forgotPassword') {
             $this->sendNewPassword();
             (new ForgotPassword())->show(1);
         }
@@ -19,9 +21,10 @@ class ForgotPasswordController
      * @uses UserModel::mailExists() to check if the address exists in the database.
      * @description sends a new password to the specified mail address if it exists in the database.
      */
-    public function sendNewPassword(){
+    public function sendNewPassword()
+    {
         $mail = $_POST['mail'];
-        if(UserModel::mailExists($mail)){
+        if (UserModel::mailExists($mail)) {
             $password = $this->random_password();
             $user = new UserModel($mail);
             $user->setPassword($password);
@@ -56,6 +59,6 @@ class ForgotPasswordController
         $random_password .= substr($numbers, 0, $random_characters);
         $random_password .= substr($symbols, 0, $random_characters);
 
-        return  str_shuffle($random_password);
+        return str_shuffle($random_password);
     }
 }

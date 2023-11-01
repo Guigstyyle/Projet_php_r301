@@ -35,7 +35,7 @@ HTML;
                 <td>' . $title . '</td>
                 <td>' . $frontname . '</td>
                 <td>' . $message . '</td>
-                <td>' . date('d/m/Y H\hi',strtotime($date)) . '</td>
+                <td>' . date('d/m/Y H\hi', strtotime($date)) . '</td>
                 <td>
                     <form method="post" action="index.php">
                         <input type="hidden" name="idticket" value="' . $id . '">
@@ -75,7 +75,7 @@ HTML;
                 <td>' . $description . '</td>
                 <td>
                     <form method="post" action="index.php">
-                        <input type="hidden" name="idcategory" value="'.$id.'">
+                        <input type="hidden" name="idcategory" value="' . $id . '">
                         <button type="submit" name="action" value="showCategory">Voir</button>
                     </form>
                 </td>

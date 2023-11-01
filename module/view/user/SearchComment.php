@@ -39,7 +39,7 @@ HTML;
         <tr><th>IdComment</th><th>IdTicket</th><th>Username</th><th>Text</th><th>date</th></tr>
     </thead>
     <tbody>' . PHP_EOL;
-        foreach ($comments as $comment){
+        foreach ($comments as $comment) {
 
             $content .= $this->setContent($comment);
         }

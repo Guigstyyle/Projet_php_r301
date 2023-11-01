@@ -67,19 +67,19 @@ try {
             $action === 'showComment') {
             (new CommentController())->execute();
         }
-        if ($action === 'toSearch'){
+        if ($action === 'toSearch') {
             (new SearchController())->execute();
         }
         if ($action === 'toAccountPage' or
             $action === 'changeInformations' or
-            $action === 'changePassword'){
+            $action === 'changePassword') {
             (new AccountPageController())->execute();
         }
         if ($action === 'toForgotPassword' or
-            $action === 'forgotPassword'){
+            $action === 'forgotPassword') {
             (new ForgotPasswordController())->execute();
         }
-        if ($action === 'toMentionPage'){
+        if ($action === 'toMentionPage') {
             (new MentionPageController())->execute();
         }
     } else {

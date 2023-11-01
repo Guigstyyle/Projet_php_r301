@@ -1,7 +1,6 @@
 <?php
 
 
-
 require_once __DIR__ . '/../view/user/AdminPage.php';
 require_once __DIR__ . '/../view/ErrorPage.php';
 

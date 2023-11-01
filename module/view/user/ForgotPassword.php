@@ -2,7 +2,8 @@
 
 class ForgotPassword
 {
-    public function setContent(){
+    public function setContent(): string
+    {
         return <<<HTML
 
 <form class="userForm" method="post" action="index.php">
@@ -17,11 +18,13 @@ class ForgotPassword
 HTML;
 
     }
-    public function show($sent = null){
+
+    public function show($sent = null)
+    {
         $content = $this->setContent();
-        if (isset($sent)){
-            $content .='Si l\'adresse fournie est valide vous allez recevoir un mail.';
+        if (isset($sent)) {
+            $content .= 'Si l\'adresse fournie est valide vous allez recevoir un mail.';
         }
-        (new Layout('Récupération de mot de passe',$content))->show();
+        (new Layout('Récupération de mot de passe', $content))->show();
     }
 }

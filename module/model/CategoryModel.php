@@ -180,7 +180,7 @@ class CategoryModel
     {
         $pdo = DatabaseConnection::connect();
         $query = $pdo->prepare('SELECT idticket FROM TICKETCATEGORY WHERE idcategory = :idTicket');
-        $query->bindValue(':idTicket',$this->idCategory);
+        $query->bindValue(':idTicket', $this->idCategory);
         $query->execute();
 
         $tickets = array();

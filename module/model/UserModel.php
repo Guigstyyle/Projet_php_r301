@@ -92,7 +92,7 @@ class UserModel
     {
         $this->username = $username;
         $this->mail = $mail;
-        $this->password = password_hash($password,PASSWORD_BCRYPT);
+        $this->password = password_hash($password, PASSWORD_BCRYPT);
         $this->firsconnection = date('Y-m-d H:i:s');
         $this->lasconnection = date('Y-m-d H:i:s');
         $this->administrator = 0;
@@ -163,6 +163,7 @@ class UserModel
     {
         return $this->username;
     }
+
     /**
      * @return string
      */
@@ -218,6 +219,7 @@ class UserModel
     {
         return $this->deactivated;
     }
+
     public function getTicketsMentions(): array
     {
         $pdo = DatabaseConnection::connect();
@@ -231,6 +233,7 @@ class UserModel
         }
         return $tickets;
     }
+
     public function getCommentsMentions(): array
     {
         $pdo = DatabaseConnection::connect();
@@ -249,11 +252,12 @@ class UserModel
      * @param $username
      * @return void
      */
-    public function setUsername($username){
+    public function setUsername($username)
+    {
         $pdo = DatabaseConnection::connect();
         $query = $pdo->prepare('UPDATE USER SET username = :newusername WHERE username = :username');
-        $query->bindValue(':newusername',$username);
-        $query->bindValue(':username',$this->username);
+        $query->bindValue(':newusername', $username);
+        $query->bindValue(':username', $this->username);
         $query->execute();
         $this->username = $username;
     }
@@ -261,12 +265,13 @@ class UserModel
     /**
      * @param mixed $frontname
      */
-    public function setFrontname($frontname): void{
+    public function setFrontname($frontname): void
+    {
         $this->frontname = $frontname;
         $pdo = DatabaseConnection::connect();
         $query = $pdo->prepare('UPDATE USER SET frontname = :newfrontname WHERE username = :username');
-        $query->bindValue(':newfrontname',$frontname);
-        $query->bindValue(':username',$this->username);
+        $query->bindValue(':newfrontname', $frontname);
+        $query->bindValue(':username', $this->username);
         $query->execute();
     }
 
@@ -278,19 +283,21 @@ class UserModel
         $this->mail = $mail;
         $pdo = DatabaseConnection::connect();
         $query = $pdo->prepare('UPDATE USER SET mail = :newmail WHERE username = :username');
-        $query->bindValue(':newmail',$mail);
-        $query->bindValue(':username',$this->username);
+        $query->bindValue(':newmail', $mail);
+        $query->bindValue(':username', $this->username);
         $query->execute();
     }
 
-    public function setPassword($password){
+    public function setPassword($password)
+    {
         $this->password = $password;
         $pdo = DatabaseConnection::connect();
         $query = $pdo->prepare('UPDATE USER SET password = :newpassword WHERE username = :username');
-        $query->bindValue(':newpassword',password_hash($password,PASSWORD_BCRYPT));
-        $query->bindValue(':username',$this->username);
+        $query->bindValue(':newpassword', password_hash($password, PASSWORD_BCRYPT));
+        $query->bindValue(':username', $this->username);
         $query->execute();
     }
+
     /**
      * @return bool
      * @description Change the privilege of the user and update the database
@@ -369,7 +376,7 @@ class UserModel
         if (!$result) {
             return $result;
         }
-        if (password_verify($password,$result['password'])) {
+        if (password_verify($password, $result['password'])) {
             return true;
         }
         return false;

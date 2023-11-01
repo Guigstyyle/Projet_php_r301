@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../view/user/MentionPage.php';
 require_once __DIR__ . '/../model/UserModel.php';
+
 class MentionPageController
 {
     /**

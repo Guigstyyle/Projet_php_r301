@@ -1,13 +1,15 @@
 <?php
 
 
-
 require_once __DIR__ . '/../view/user/Login.php';
 require_once __DIR__ . '/../view/ErrorPage.php';
 require_once __DIR__ . '/../model/UserModel.php';
 
 class LoginController
 {
+    /**
+     * @throws Exception
+     */
     public function execute()
     {
         if ($_POST['action'] === 'login') {

@@ -38,7 +38,7 @@ HTML;
         <tr><th>Id</th><th>title</th><th>message</th><th>date</th><th>username</th></tr>
     </thead>
     <tbody>' . PHP_EOL;
-        foreach ($tickets as $ticket){
+        foreach ($tickets as $ticket) {
             $content .= $this->setContent($ticket);
         }
         $content .= '</tbody>' . PHP_EOL . '</table>';

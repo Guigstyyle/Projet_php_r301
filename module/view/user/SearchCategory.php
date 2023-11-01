@@ -43,8 +43,8 @@ HTML;
         foreach ($categories as $category) {
             $content .= $this->setContent($category);
         }
-            $content .= '</tbody>' . PHP_EOL . '</table>';
-            (new Layout('Résultat de la recherche :', $content))->show();
+        $content .= '</tbody>' . PHP_EOL . '</table>';
+        (new Layout('Résultat de la recherche :', $content))->show();
 
     }
 }

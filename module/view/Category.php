@@ -1,4 +1,5 @@
 <?php
+
 class Category
 {
     public function setContent($category): string
@@ -49,7 +50,7 @@ HTML;
                 <td>' . $title . '</td>
                 <td>' . $frontname . '</td>
                 <td>' . $message . '</td>
-                <td>' . date('d/m/Y H\hi',strtotime($date)) . '</td>
+                <td>' . date('d/m/Y H\hi', strtotime($date)) . '</td>
                 <td>
                     <form method="post" action="index.php">
                         <input type="hidden" name="idticket" value="' . $id . '">
@@ -69,7 +70,6 @@ HTML;
 HTML;
         return $content;
     }
-
 
 
     public function show($category)

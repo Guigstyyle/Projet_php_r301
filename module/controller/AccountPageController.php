@@ -14,13 +14,13 @@ class AccountPageController
 
         if ($action === 'changeInformations') {
             session_start();
-            if ($this->changeInformations()){
+            if ($this->changeInformations()) {
                 (new AccountPage())->show();
             }
         }
         if ($action === 'changePassword') {
             session_start();
-            if ($this->changePassword()){
+            if ($this->changePassword()) {
                 (new AccountPage())->show();
             }
         }
@@ -84,11 +84,11 @@ class AccountPageController
                 }
             }
             $password = $_POST['password'];
-            if (!password_verify($password,$user->getPassword())) {
+            if (!password_verify($password, $user->getPassword())) {
                 throw new Exception('Mot de passe incorrect.');
             }
 
-        }catch (Exception $exception){
+        } catch (Exception $exception) {
             (new ErrorPage())->show($exception->getMessage());
             return false;
         }
@@ -114,25 +114,26 @@ class AccountPageController
             $password = $_POST['password'];
             $newPassword = $_POST['newPassword'];
             $newPasswordConfirm = $_POST['newPasswordConfirm'];
-            if ($newPasswordConfirm !== $newPassword){
+            if ($newPasswordConfirm !== $newPassword) {
                 throw new Exception('Les nouveaux mots de passe de correspondent pas.');
             }
-            if (!$this->validatePasswordRegex($newPassword)){
+            if (!$this->validatePasswordRegex($newPassword)) {
                 throw new Exception('Le mot de passe doit contenir 8 caractères dont :<br>' . PHP_EOL . '      -Une majuscule<br>' . PHP_EOL . '     -Une minuscule<br>' . PHP_EOL . '      -Un chiffre<br>' . PHP_EOL . '     -Un caractère spécial');
             }
-            if (!UserModel::verifyPassword($user->getUsername(),$password)){
+            if (!UserModel::verifyPassword($user->getUsername(), $password)) {
                 throw new Exception('Mot de passe incorrect.');
             }
-            if ($newPassword === $password){
+            if ($newPassword === $password) {
                 throw new Exception('Le nouveau mot de passe doit être différent de l\'ancien.');
             }
             return true;
-        }catch (Exception $exception){
+        } catch (Exception $exception) {
             (new ErrorPage())->show($exception->getMessage());
             return false;
         }
 
     }
+
     public function validatePasswordRegex($password): bool
     {
         $password_regex = "/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/";

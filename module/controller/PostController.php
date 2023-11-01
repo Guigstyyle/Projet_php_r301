@@ -26,23 +26,23 @@ class PostController
                 (new Post())->show($ticket);
             }
         }
-        if ($action === 'showTicket'){
+        if ($action === 'showTicket') {
             $ticket = new TicketModel($_POST['idticket']);
             (new Post())->show($ticket);
         }
-        if ($action === 'toModifyTicket'){
+        if ($action === 'toModifyTicket') {
             (new EditTicket())->show(new TicketModel($_POST['idticket']));
         }
-        if ($action === 'modifyTicket'){
+        if ($action === 'modifyTicket') {
             if ($ticket = $this->modifyTicket())
                 (new Post())->show($ticket);
         }
-        if ($action === 'deleteTicket'){
-            if($this->deleteTicket()){
+        if ($action === 'deleteTicket') {
+            if ($this->deleteTicket()) {
                 (new Homepage())->show(TicketModel::getFiveLast());
             }
         }
-        if ($action === 'toSearchTicket'){
+        if ($action === 'toSearchTicket') {
             $tickets = TicketModel::getAllTicketsLike($_POST['titleOrMessageLike']);
             (new SearchTicket())->show($tickets);
         }
@@ -56,27 +56,24 @@ class PostController
      */
     public function post()
     {
-        if ($this->validatePostForm()){
+        if ($this->validatePostForm()) {
             $title = $_POST['title'];
             $message = $_POST['message'];
             $username = $_SESSION['user']->getUsername();
             if (isset($_POST['selectedCategories'])) {
                 $categories = $_POST['selectedCategories'];
-                if (!isset($_POST['selectedUsers'])){
-                    $ticket = new TicketModel($title,$message,$username,$categories);
-                }
-                else{
+                if (!isset($_POST['selectedUsers'])) {
+                    $ticket = new TicketModel($title, $message, $username, $categories);
+                } else {
                     $mentionedUsers = $_POST['selectedUsers'];
-                    $ticket = new TicketModel($title,$message,$username,$categories,$mentionedUsers);
+                    $ticket = new TicketModel($title, $message, $username, $categories, $mentionedUsers);
                 }
-            }
-            else{
-                if (isset($_POST['selectedUsers'])){
+            } else {
+                if (isset($_POST['selectedUsers'])) {
                     $mentionedUsers = $_POST['selectedUsers'];
-                    $ticket = new TicketModel($title,$message,$username,null,$mentionedUsers);
-                }
-                else{
-                    $ticket = new TicketModel($title,$message,$username);
+                    $ticket = new TicketModel($title, $message, $username, null, $mentionedUsers);
+                } else {
+                    $ticket = new TicketModel($title, $message, $username);
                 }
             }
             return $ticket;
@@ -94,7 +91,7 @@ class PostController
      */
     public function modifyTicket()
     {
-        if (!$this->validatePostForm()){
+        if (!$this->validatePostForm()) {
             return false;
         }
         $id = $_POST['idTicket'];
@@ -103,25 +100,23 @@ class PostController
         $ticket = new TicketModel($id);
 
         try {
-            if (!$this->verifyAuthor($ticket)){
-            throw new Exception('Vous ne pouvez pas modifier les billes des autres.');
+            if (!$this->verifyAuthor($ticket)) {
+                throw new Exception('Vous ne pouvez pas modifier les billes des autres.');
             }
-        }catch (Exception $exception){
+        } catch (Exception $exception) {
             (new ErrorPage())->show($exception->getMessage());
             return false;
         }
         $ticket->setTitle($title);
         $ticket->setMessage($message);
-        if (isset($_POST['selectedUsers'])){
+        if (isset($_POST['selectedUsers'])) {
             $ticket->updateMentions($_POST['selectedUsers']);
-        }
-        else{
+        } else {
             $ticket->removeMentions();
         }
-        if (isset($_POST['selectedCategories'])){
+        if (isset($_POST['selectedCategories'])) {
             $ticket->updateCategories($_POST['selectedCategories']);
-        }
-        else{
+        } else {
             $ticket->removeCategories();
         }
         return $ticket;
@@ -138,12 +133,12 @@ class PostController
     {
         $ticket = $_POST['idticket'];
         try {
-            if(!$this->verifyAuthor($ticket)){
+            if (!$this->verifyAuthor($ticket)) {
                 throw new Exception('Vous ne pouvez pas supprimer les commentaires des autres.');
             }
             TicketModel::deleteTicket($_POST['idticket']);
             return true;
-        }catch (Exception $exception){
+        } catch (Exception $exception) {
             (new ErrorPage())->show($exception->getMessage());
             return false;
         }
@@ -163,10 +158,10 @@ class PostController
         $message = $_POST['message'];
 
         try {
-            if (empty($title)){
+            if (empty($title)) {
                 throw new Exception('Titre vide.');
             }
-            if (empty($message)){
+            if (empty($message)) {
                 throw new Exception('Message vide.');
             }
             if (!TicketModel::titleLenLimit($title)) {
@@ -175,28 +170,29 @@ class PostController
             if (!TicketModel::messageLenLimit($message)) {
                 throw new Exception('Le message est trop long (plus de 3000 caractères).');
             }
-            if (isset($_POST['selectedCategories'])){
+            if (isset($_POST['selectedCategories'])) {
                 $categories = $_POST['selectedCategories'];
                 foreach ($categories as $category) {
-                    if(!CategoryModel::nameExists($category)){
+                    if (!CategoryModel::nameExists($category)) {
                         throw new Exception('Catégorie(s) invalide(s).');
                     }
                 }
             }
-            if (isset($_POST['selectedUsers'])){
+            if (isset($_POST['selectedUsers'])) {
                 $users = $_POST['selectedUsers'];
-                foreach ($users as $username){
-                    if(!UserModel::usernameExists($username)){
+                foreach ($users as $username) {
+                    if (!UserModel::usernameExists($username)) {
                         throw new Exception('Utilisateur(s) introuvable(s)');
                     }
                 }
             }
             return true;
-        } catch(Exception $exception){
+        } catch (Exception $exception) {
             (new ErrorPage())->show($exception->getMessage());
             return false;
         }
     }
+
     /**
      * @param $ticket
      * @return bool

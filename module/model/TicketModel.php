@@ -165,7 +165,7 @@ class TicketModel
         return $user->getFrontname();
     }
 
-    public function getMentions()
+    public function getMentions(): array
     {
         $pdo = DatabaseConnection::connect();
         $query = $pdo->prepare('SELECT * FROM MENTIONTICKET WHERE idticket = :idTicket');
@@ -179,10 +179,10 @@ class TicketModel
         return $mentions;
     }
 
-    public function getComments()
+    public function getComments(): array
     {
         $pdo = DatabaseConnection::connect();
-        $query = $pdo->prepare('SELECT * FROM COMMENT WHERE idticket = :idTicket');
+        $query = $pdo->prepare('SELECT * FROM COMMENT WHERE idticket = :idTicket ORDER BY date DESC ');
         $query->bindValue(':idTicket', $this->idTicket);
         $query->execute();
         $comments = array();
@@ -193,7 +193,7 @@ class TicketModel
         return $comments;
     }
 
-    public function getCategories()
+    public function getCategories(): array
     {
         $pdo = DatabaseConnection::connect();
         $query = $pdo->prepare('SELECT idcategory FROM TICKETCATEGORY  WHERE :idticket = TICKETCATEGORY.idticket');

@@ -51,6 +51,15 @@ class CategoryController
 
     }
 
+    /**
+     * @param $category
+     * @return bool
+     * @throws Exception
+     * @uses CategoryModel::nameLenLimit() to check that the typed name respect the length limit
+     * @uses CategoryModel::nameExists() to check that the typed name doesn't already exist
+     * @uses CategoryModel::descriptionLenLimit() to check that the typed description respect the length limit
+     * @description verifies if the category form is correct
+     */
     public function validateCategoryForm($category): bool
     {
         $categoryName = $_POST['categoryName'];
@@ -84,14 +93,23 @@ class CategoryController
         }
     }
 
+    /**
+     * @param $category
+     * @return void
+     * @description modifies the given category based on the form. Should only be used after CategoryController::validateCategoryForm()
+     */
     public function modifyCategory($category)
     {
-
         $category->setName($_POST['categoryName']);
         $category->setDescription($_POST['description']);
         $category->updateCategory();
     }
 
+    /**
+     * @param $id
+     * @return bool
+     * @description deletes the category from the database using its id
+     */
     public function removeCategory($id): bool
     {
         try {

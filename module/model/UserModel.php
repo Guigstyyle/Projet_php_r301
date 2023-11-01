@@ -244,6 +244,11 @@ class UserModel
         }
         return $comments;
     }
+
+    /**
+     * @param $username
+     * @return void
+     */
     public function setUsername($username){
         $pdo = DatabaseConnection::connect();
         $query = $pdo->prepare('UPDATE USER SET username = :newusername WHERE username = :username');
@@ -288,7 +293,7 @@ class UserModel
     }
     /**
      * @return bool
-     * @description Change the privilege of the user an update the database
+     * @description Change the privilege of the user and update the database
      */
     public function changeAdminState(): bool
     {
@@ -378,14 +383,15 @@ class UserModel
     public static function usernameExists($username): bool
     {
         $pdo = DatabaseConnection::connect();
-        $query = $pdo->prepare('SELECT username FROM USER WHERE username = :username');
+        $query = $pdo->prepare('SELECT UPPER(username) FROM USER WHERE upper(username) = upper(:username)');
         $query->bindValue(':username', $username);
 
         $query->execute();
         $result = $query->fetch(PDO::FETCH_ASSOC);
-        if (empty($result['username'])) {
+        if (empty($result['UPPER(username)'])) {
             return false;
         }
+
         return true;
     }
 
@@ -397,12 +403,12 @@ class UserModel
     public static function mailExists($mail): bool
     {
         $pdo = DatabaseConnection::connect();
-        $query = $pdo->prepare('SELECT * FROM USER WHERE  mail = :mail');
+        $query = $pdo->prepare('SELECT UPPER(mail) FROM USER WHERE  UPPER(mail) = UPPER(:mail)');
         $query->bindValue(':mail', $mail);
 
         $query->execute();
         $result = $query->fetch(PDO::FETCH_ASSOC);
-        if (empty($result['mail'])) {
+        if (empty($result['UPPER(mail)'])) {
             return false;
         }
         return true;
@@ -413,7 +419,7 @@ class UserModel
      * @return array
      * @description Get all the users that have $like in their username from the database
      */
-    public static function getAllUsersLike($like)
+    public static function getAllUsersLike($like): array
     {
         $pdo = DatabaseConnection::connect();
         $query = $pdo->prepare('SELECT * FROM USER WHERE UPPER(username) LIKE UPPER(:like) ORDER BY UPPER(username)');

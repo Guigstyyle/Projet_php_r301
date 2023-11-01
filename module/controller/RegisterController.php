@@ -55,7 +55,8 @@ class RegisterController
      * @description : Checks if the form is valid
      * @uses UserModel::usernameExists() to check that the username does not already exist
      * @uses UserModel::mailExists() to check that the mail does not already exist
-     * @uses validatePasswordForm to make sure the password is secure
+     * @uses RegisterController::validatePasswordRegex() to make sure the password is secure
+     * @uses RegisterController::doubleCheckPassword() to make sure the password is correctly typed
      */
     public function validateRegisterForm(): bool
     {

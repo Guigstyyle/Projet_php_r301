@@ -2,6 +2,13 @@
 require_once __DIR__ . '/../view/Search.php';
 class SearchController
 {
+    /**
+     * @return void
+     * @uses CategoryModel::getAllCategoriesLike()
+     * @uses TicketModel::getAllTicketsLike()
+     * @uses CommentModel::getAllCommentsLike()
+     * @description gets all the search result and passes them to the view via an array
+     */
     public function execute()
     {
         $action = $_POST['action'];

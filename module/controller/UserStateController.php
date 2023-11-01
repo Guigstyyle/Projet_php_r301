@@ -35,6 +35,11 @@ class UserStateController
         }
     }
 
+    /**
+     * @param $username
+     * @return bool
+     * @description deletes a user from the database
+     */
     public function deleteUser($username): bool
     {
         try {
@@ -49,12 +54,22 @@ class UserStateController
 
     }
 
-    public function changeAdminState($user)
+    /**
+     * @param $user
+     * @return bool
+     * @description  promotes or downgrades a user to admin or from admin
+     */
+    public function changeAdminState($user): bool
     {
         return $user->changeAdminState();
     }
 
-    public function changeAccountState($user)
+    /**
+     * @param $user
+     * @return bool
+     * @description activates or deactivates an account
+     */
+    public function changeAccountState($user): bool
     {
         return $user->changeAccountState();
     }

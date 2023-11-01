@@ -26,6 +26,11 @@ class AccountPageController
         }
     }
 
+    /**
+     * @return bool
+     * @description verifies and changes information of the user and update the database
+     * @uses $this->validateChangeInformationsForm();
+     */
     public function changeInformations(): bool
     {
         $user = $_SESSION['user'];
@@ -36,6 +41,7 @@ class AccountPageController
 
             if ($username !== $user->getUsername()) {
                 $user->setUsername($username);
+
             }
             if ($mail !== $user->getMail()) {
                 $user->setmail($mail);
@@ -51,33 +57,40 @@ class AccountPageController
     /**
      * @param $user
      * @return bool
-     * @todo Verify input and handle errors
+     * @todo Verify username input for special characters and all input for len limit
      */
     public function validateChangeInformationsForm($user): bool
     {
 
-        if (empty($_POST['username'] or empty($_POST['mail']))) {
-            return false; //empty field(s)
-        }
-        if (empty($_POST['password'])) {
-            return false; //password empty
-        }
-        $username = $_POST['username'];
-        $mail = $_POST['mail'];
+        try {
+            if (empty($_POST['username'] or empty($_POST['mail']))) {
+                throw new Exception('Certains champs sont vides.');
+            }
+            if (empty($_POST['password'])) {
+                throw new Exception('Le mot de passe n\'est pas renseigné.');
+            }
+            $username = $_POST['username'];
+            $mail = $_POST['mail'];
 
-        if ($username !== $user->getUsername()) {
-            if (UserModel::usernameExists($username)) {
-                return false; //Username already exists
+            if ($username !== $user->getUsername()) {
+                if (UserModel::usernameExists($username)) {
+
+                    throw new Exception('Le username existe déjà.');
+                }
             }
-        }
-        if ($mail !== $user->getMail()) {
-            if (UserModel::mailExists($mail)) {
-                return false; //Mail already exists
+            if ($mail !== $user->getMail()) {
+                if (UserModel::mailExists($mail)) {
+                    throw new Exception('Cette adresse est déjà utilisé.');
+                }
             }
-        }
-        $password = $_POST['password'];
-        if (!password_verify($password,$user->getPassword())) {
-            return false; //Wrong password
+            $password = $_POST['password'];
+            if (!password_verify($password,$user->getPassword())) {
+                throw new Exception('Mot de passe incorrect.');
+            }
+
+        }catch (Exception $exception){
+            (new ErrorPage())->show($exception->getMessage());
+            return false;
         }
         return true;
     }
@@ -94,25 +107,30 @@ class AccountPageController
 
     public function validateChangePasswordForm($user): bool
     {
-        if (empty($_POST['password']) or empty($_POST['newPassword']) or empty($_POST['newPasswordConfirm'])) {
-            return false;//empty field(s)
+        try {
+            if (empty($_POST['password']) or empty($_POST['newPassword']) or empty($_POST['newPasswordConfirm'])) {
+                throw new Exception('Certains champs sont vides.');
+            }
+            $password = $_POST['password'];
+            $newPassword = $_POST['newPassword'];
+            $newPasswordConfirm = $_POST['newPasswordConfirm'];
+            if ($newPasswordConfirm !== $newPassword){
+                throw new Exception('Les nouveaux mots de passe de correspondent pas.');
+            }
+            if (!$this->validatePasswordRegex($newPassword)){
+                throw new Exception('Le mot de passe doit contenir 8 caractères dont :<br>' . PHP_EOL . '      -Une majuscule<br>' . PHP_EOL . '     -Une minuscule<br>' . PHP_EOL . '      -Un chiffre<br>' . PHP_EOL . '     -Un caractère spécial');
+            }
+            if (!UserModel::verifyPassword($user->getUsername(),$password)){
+                throw new Exception('Mot de passe incorrect.');
+            }
+            if ($newPassword === $password){
+                throw new Exception('Le nouveau mot de passe doit être différent de l\'ancien.');
+            }
+            return true;
+        }catch (Exception $exception){
+            (new ErrorPage())->show($exception->getMessage());
+            return false;
         }
-        $password = $_POST['password'];
-        $newPassword = $_POST['newPassword'];
-        $newPasswordConfirm = $_POST['newPasswordConfirm'];
-        if ($newPasswordConfirm !== $newPassword){
-            return false;//not matching passwords
-        }
-        if (!$this->validatePasswordRegex($newPassword)){
-            return false;//regex not passed
-        }
-        if (!UserModel::verifyPassword($user->getUsername(),$password)){
-            return false;//Wrong current password
-        }
-        if ($newPassword === $password){
-            return false;//Same password as before
-        }
-        return true;
 
     }
     public function validatePasswordRegex($password): bool

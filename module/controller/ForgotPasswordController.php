@@ -13,6 +13,12 @@ class ForgotPasswordController
             (new ForgotPassword())->show(1);
         }
     }
+
+    /**
+     * @return void
+     * @uses UserModel::mailExists() to check if the address exists in the database.
+     * @description sends a new password to the specified mail address if it exists in the database.
+     */
     public function sendNewPassword(){
         $mail = $_POST['mail'];
         if(UserModel::mailExists($mail)){
@@ -26,6 +32,11 @@ class ForgotPasswordController
             mail($mail, 'Inscription', $message, 'From:' . $from);
         }
     }
+
+    /**
+     * @return string
+     * @description generates a random password that passes the regex requirements.
+     */
     function random_password(): string
     {
         $random_characters = 2;

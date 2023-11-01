@@ -6,7 +6,6 @@ class HomepageController
 {
     public function execute(): void
     {
-
         (new Homepage())->show(TicketModel::getFiveLast());
     }
 }

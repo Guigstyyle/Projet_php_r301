@@ -20,6 +20,12 @@ class LoginController
         }
     }
 
+    /**
+     * @return bool
+     * @throws Exception
+     * @uses LoginController::validateLoginForm() to check for any errors in the form.
+     * @description sets the suid and the user (a UserModel) keys in $_SESSION updates the lastconnection attribute of the user.
+     */
     public function connectUser(): bool
     {
         if (!$this->validateLoginForm()) {
@@ -36,6 +42,12 @@ class LoginController
         return true;
     }
 
+    /**
+     * @return bool
+     * @throws Exception
+     * @uses UserModel::verifyPassword() to check that the password corresponds to the login.
+     * @description Verifies that all fields are filled and that the password is correct.
+     */
     public function validateLoginForm(): bool
     {
         try {

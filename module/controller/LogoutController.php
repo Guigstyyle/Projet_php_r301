@@ -13,6 +13,10 @@ class LogoutController
 
     }
 
+    /**
+     * @return void
+     * @description logs out the current user, unsets $_session to delete the suid and destroys the session.
+     */
     public function logout()
     {
         session_start();

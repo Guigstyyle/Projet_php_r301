@@ -8,6 +8,9 @@ require_once __DIR__ . '/../view/Post.php';
 class CommentController
 {
 
+    /**
+     * @throws Exception
+     */
     public function execute()
     {
         if (session_status() == PHP_SESSION_NONE) {
@@ -28,9 +31,10 @@ class CommentController
             }
         }
         if ($action === 'deleteComment') {
-            CommentModel::deleteComment($_POST['idcomment']);
-            $ticket = new TicketModel($_POST['idticket']);
-            (new Post())->show($ticket);
+            if ($this->deleteComment()) {
+                $ticket = new TicketModel($_POST['idticket']);
+                (new Post())->show($ticket);
+            }
         }
         if ($action === 'toSearchComment') {
             $comments = CommentModel::getAllCommentsLike($_POST['textLike']);
@@ -45,33 +49,24 @@ class CommentController
     }
 
     /**
-     * @todo verify the form (the connected user posted correct mentions as well)
+     * @return CommentModel|false
+     * @throws Exception
+     * @uses CommentController::validateCommentForm() to make sure there no error in the form.
+     * @description Create the right comment model object that registers it to the database.
      */
-    public function modifyComment(): bool
-    {
-        $id = $_POST['idcomment'];
-        $text = ($_POST['modifiedComment']);
-        $comment = new CommentModel($id);
-        $comment->setText($text);
-
-        if (isset($_POST['selectedUsers'])) {
-            $comment->updateMentions($_POST['selectedUsers']);
-        } else {
-            $comment->removeMentions();
-        }
-        return true;
-
-    }
-
     public function comment()
     {
-        if (!$this->validateCommentForm()) {
+        $text = $_POST['text'];
+        if (!$this->validateCommentForm($text)) {
             return false;
         }
         $user = $_SESSION['user'];
-        $text = $_POST['text'];
         $idTicket = $_POST['idticket'];
-        $mentions = $_POST['selectedUsers'];
+
+        $mentions = null;
+        if (isset($_POST['selectedUsers'])) {
+            $mentions = $_POST['selectedUsers'];
+        }
         if (isset($mentions)) {
             $comment = new CommentModel($user->getUsername(), $text, $idTicket, $mentions);
         } else {
@@ -81,13 +76,92 @@ class CommentController
 
     }
 
-    public function validateCommentForm(): bool
+    /**
+     * @return bool
+     * @throws Exception
+     * @uses CommentController::verifyAuthor() to make sure a user didn't modify the form to edit another user's comment.
+     * @uses CommentController::validateCommentForm() to make sure there no error in the form.
+     * @description Create a comment model using its id and updates the text and mentions of the comment.
+     */
+    public function modifyComment(): bool
     {
-        $text = $_POST['text'];
-        if (empty($text)) {
+        $text = ($_POST['modifiedComment']);
+        if (!$this->validateCommentForm($text)) {
             return false;
         }
-        if (!CommentModel::textLenLimit($text)) {
+        $id = $_POST['idcomment'];
+        $comment = new CommentModel($id);
+        try {
+            if (!$this->verifyAuthor($comment)) {
+                throw new Exception('Vous ne pouvez pas modifier les commentaires des autres.');
+            }
+
+        } catch (Exception $exception) {
+            (new ErrorPage())->show($exception->getMessage());
+            return false;
+        }
+
+        $comment->setText($text);
+        if (isset($_POST['selectedUsers'])) {
+            $comment->updateMentions($_POST['selectedUsers']);
+        } else {
+            $comment->removeMentions();
+        }
+        return true;
+
+    }
+
+    /**
+     * @return bool
+     * @throws Exception
+     * @uses CommentController::verifyAuthor() to check that the deletion is made by the author.
+     * @uses CommentModel::deleteComment() to delete the comment from the database.
+     * @description deletes the comment from the database.
+     */
+    private function deleteComment(): bool
+    {
+        try {
+            if (!$this->verifyAuthor(new CommentModel($_POST['idcomment']))) {
+                throw new Exception('Vous ne pouvez pas supprimer les commentaires des autres');
+            }
+            CommentModel::deleteComment($_POST['idcomment']);
+            return true;
+        } catch (Exception $exception) {
+            (new ErrorPage())->show($exception->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * @param $text
+     * @return bool
+     * @throws Exception
+     * @description Checks that the text is not empty or larger than 3000 characters.
+     */
+    public function validateCommentForm($text): bool
+    {
+        try {
+            if (empty($text)) {
+                throw new Exception('Vous ne pouvez pas poster un commentaire vide.');
+            }
+            if (!CommentModel::textLenLimit($text)) {
+                throw new Exception('Le commentaire est trop long (plus de 3000 caractères).');
+            }
+            return true;
+        } catch (Exception $exception) {
+            (new ErrorPage())->show($exception->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * @param $comment
+     * @return bool
+     * @description ensures that author of the comment is the one that is modifying or deleting it.
+     */
+    public function verifyAuthor($comment): bool
+    {
+        if ($comment->getUsername() !== $_SESSION['user']->getUsername()) {
             return false;
         }
         return true;

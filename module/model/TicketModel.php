@@ -378,6 +378,9 @@ class TicketModel
      */
     public function getUsername(): string
     {
+        if (!isset($this->username)){
+            return 'Compte supprimé';
+        }
         return $this->username;
     }
 

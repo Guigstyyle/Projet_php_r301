@@ -144,6 +144,9 @@ class CommentModel
      */
     public function getUsername(): string
     {
+        if (!isset($this->username)) {
+            return 'Compte supprimé';
+        }
         return $this->username;
     }
 
@@ -176,7 +179,8 @@ class CommentModel
      * @return void
      * @description set the state of the comment to important (1).
      */
-    public function setImportant(){
+    public function setImportant()
+    {
         $this->important = 1;
         $pdo = DatabaseConnection::connect();
         $query = $pdo->prepare('UPDATE COMMENT SET important = 1 WHERE idcomment = :idTicket');
@@ -188,13 +192,15 @@ class CommentModel
      * @return void
      * @description set the state of the comment to not important (0).
      */
-    public function setNotImportant(){
+    public function setNotImportant()
+    {
         $this->important = 0;
         $pdo = DatabaseConnection::connect();
         $query = $pdo->prepare('UPDATE COMMENT SET important = 0 WHERE idcomment = :idTicket');
         $query->bindValue(':idTicket', $this->idComment);
         $query->execute();
     }
+
     /**
      * @param string $text
      */

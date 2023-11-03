@@ -4,7 +4,7 @@ class PostPage
 {
     public function setContent(): string
     {
-        return <<<HTML
+        $content = <<<HTML
 <form class="userForm" id="postForm" method="post" action="index.php">
     <label for="title">Titre :</label>
     <input id="title" type="text" name="title" maxlength="50" placeholder="Titre">
@@ -38,6 +38,18 @@ class PostPage
         </ul>
     </div>
     <div class="buttonContainer" ">
+HTML;
+        if ($_SESSION['user']->getAdministrator()) {
+            $content .= <<<HTML
+        <div>
+            <label for="important">Important</label>
+            <input id="important" type="checkbox" name="important">
+        </div>
+
+HTML;
+
+        }
+        $content .= <<<HTML
         <button type="submit" name="action" value="post">Publier</button>
     </div>
 </form>
@@ -45,7 +57,7 @@ class PostPage
 <script src="/_assets/scripts/CategoryAutosuggest.js"></script>
 <script src="/_assets/scripts/UserAutosuggest.js"></script>
 HTML;
-
+        return $content;
     }
 
     public function show()

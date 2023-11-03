@@ -176,11 +176,24 @@ class CategoryModel
         return true;
     }
 
-    public function getTickets()
+    public function getImportantTickets(): array
     {
         $pdo = DatabaseConnection::connect();
-        $query = $pdo->prepare('SELECT idticket FROM TICKETCATEGORY WHERE idcategory = :idTicket');
-        $query->bindValue(':idTicket', $this->idCategory);
+        $query = $pdo->prepare('SELECT TICKET.idticket FROM TICKETCATEGORY TC JOIN TICKET ON TC.idticket = TICKET.idticket WHERE TC.idcategory = :idCategory AND TICKET.important = 1 ORDER BY date DESC');
+        $query->bindValue(':idCategory', $this->idCategory);
+        $query->execute();
+
+        $tickets = array();
+        while ($ticket = $query->fetch(PDO::FETCH_ASSOC)) {
+            $tickets[] = (new TicketModel($ticket['idticket']));
+        }
+        return $tickets;
+    }
+    public function getTickets(): array
+    {
+        $pdo = DatabaseConnection::connect();
+        $query = $pdo->prepare('SELECT idticket FROM TICKETCATEGORY WHERE idcategory = :idCategory');
+        $query->bindValue(':idCategory', $this->idCategory);
         $query->execute();
 
         $tickets = array();

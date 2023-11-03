@@ -28,7 +28,6 @@ class Register
         <button type="reset">Effacer</button>
         <button type="submit" name="action" value="register">Créer le compte</button>
     </div>
-    
 </form>
 HTML;
     }

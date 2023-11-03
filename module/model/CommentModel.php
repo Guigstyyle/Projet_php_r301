@@ -9,6 +9,7 @@ class CommentModel
     private $username;
     private $idTicket;
     private $date;
+    private $important;
 
     public function __construct()
     {
@@ -45,17 +46,18 @@ class CommentModel
         $this->text = $comment['text'];
         $this->idTicket = $comment['idticket'];
         $this->date = $comment['date'];
+        $this->important = $comment['important'];
 
     }
 
-    public function __construct3($username, $text, $idticket)
+    public function __construct4($username, $text, $idticket,$important)
     {
-        $this->constructOnNewComment($username, $text, $idticket);
+        $this->constructOnNewComment($username, $text, $idticket, $important);
     }
 
-    public function __construct4($username, $text, $idticket, $mentions)
+    public function __construct5($username, $text, $idticket, $mentions,$important)
     {
-        $this->constructOnNewComment($username, $text, $idticket);
+        $this->constructOnNewComment($username, $text, $idticket, $important);
 
         $this->addMentions($mentions);
     }
@@ -64,21 +66,25 @@ class CommentModel
      * @param $username
      * @param $text
      * @param $idticket
+     * @param $important
      * @return void
      */
-    public function constructOnNewComment($username, $text, $idticket): void
+    public function constructOnNewComment($username, $text, $idticket, $important): void
     {
         $this->username = $username;
         $this->text = $text;
         $this->idTicket = $idticket;
         $this->date = date('Y-m-d H:i:s');
+        $this->important = $important;
 
         $pdo = DatabaseConnection::connect();
-        $query = $pdo->prepare('INSERT INTO COMMENT (username,text,idticket,date) VALUES (:username,:text,:idticket,:date)');
+        $query = $pdo->prepare('INSERT INTO COMMENT (username,text,idticket,date,important) VALUES (:username,:text,:idticket,:date,:important)');
         $query->bindValue(':username', $this->username);
         $query->bindValue(':text', $this->text);
         $query->bindValue(':idticket', $this->idTicket);
         $query->bindValue(':date', $this->date);
+        $query->bindValue(':important', $this->important);
+
         $query->execute();
 
         $this->idComment = $pdo->lastInsertId();
@@ -124,6 +130,23 @@ class CommentModel
         return $this->date;
     }
 
+    public function getImportant(){
+        return $this->important;
+    }
+    public function setImportant(){
+        $this->important = 1;
+        $pdo = DatabaseConnection::connect();
+        $query = $pdo->prepare('UPDATE COMMENT SET important = 1 WHERE idcomment = :idTicket');
+        $query->bindValue(':idTicket', $this->idComment);
+        $query->execute();
+    }
+    public function setNotImportant(){
+        $this->important = 0;
+        $pdo = DatabaseConnection::connect();
+        $query = $pdo->prepare('UPDATE COMMENT SET important = 0 WHERE idcomment = :idTicket');
+        $query->bindValue(':idTicket', $this->idComment);
+        $query->execute();
+    }
     /**
      * @param mixed $text
      */
@@ -195,7 +218,7 @@ class CommentModel
     public static function getAllCommentsLike($like)
     {
         $pdo = DatabaseConnection::connect();
-        $query = $pdo->prepare('SELECT * FROM COMMENT WHERE UPPER(text) LIKE UPPER(:like) ORDER BY UPPER(text)');
+        $query = $pdo->prepare('SELECT * FROM COMMENT WHERE UPPER(text) LIKE UPPER(:like) ORDER BY date DESC');
         $query->bindValue(':like', '%' . $like . '%');
         $query->execute();
         $comments = array();

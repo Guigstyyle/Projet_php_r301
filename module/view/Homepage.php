@@ -2,92 +2,35 @@
 
 
 require_once 'Layout.php';
+require_once 'PostItemsLayout.php';
 
 class Homepage
 {
     public function setContent($fiveLast): string
     {
         $content = <<<HTML
-<h1>Bienvenue</h1>
-<section>
+    <section>
     <h2>Voici les 5 derniers posts :</h2>
-    <table>
-        <thead>
-            <tr><th>Titre</th><th>Auteur</th><th>Message</th><th>Date</th></tr>
-        </thead>
-        <tbody>
-
+    <ul>
 HTML;
         foreach ($fiveLast as $ticket) {
-            $id = $ticket->getIdTicket();
-            $title = $ticket->getTitle();
-            $date = $ticket->getDate();
-            $frontname = $ticket->getFrontnameByUsername();
-            $username = $ticket->getUsername();
-
-            if (strlen($ticket->getMessage()) > 50) {
-                $message = substr($ticket->getMessage(), 0, 50) . '...';
-            } else {
-                $message = $ticket->getMessage();
-            }
-            $content .= '
-            <tr>
-                <td>' . $title . '</td>
-                <td>' . $frontname . '</td>
-                <td>' . $message . '</td>
-                <td>' . date('d/m/Y H\hi', strtotime($date)) . '</td>
-                <td>
-                    <form method="post" action="index.php">
-                        <input type="hidden" name="idticket" value="' . $id . '">
-                        <button type="submit" name="action" value="showTicket">Voir</button>';
-            if (isset($_SESSION['suid']) and $username === $_SESSION['user']->getUsername() and $_SESSION['user']->getDeactivated() === 0) {
-                $content .= '<button type="submit" name="action" value="toModifyTicket">Modifier</button>';
-                $content .= '<button type="submit" name="action" value="deleteTicket">Supprimer</button>';
-            }
-            $content .= '</form>
-                </td>
-            </tr>';
+            $content .= (new PostItemsLayout())->ticket($ticket,200);
         }
+
+
         $content .= <<<HTML
-        </tbody>
-    </table>
+    </ul>
 </section>
 <section>
     <h2>Lites des categories</h2>
-    <table>
-        <thead>
-            <tr><th>Nom</th><th>Description</th></tr>
-        </thead>
-        <tbody>
+    <ul>
 HTML;
         $categories = CategoryModel::getAllcategories();
         foreach ($categories as $category) {
-            $id = $category->getIdCategory();
-            $name = $category->getName();
-            if (strlen($category->getDescription()) > 50) {
-                $description = substr($category->getDescription(), 0, 50) . '...';
-            } else {
-                $description = $category->getDescription();
-            }
-            $content .= '
-            <tr>
-                <td>' . $name . '</td>
-                <td>' . $description . '</td>
-                <td>
-                    <form method="post" action="index.php">
-                        <input type="hidden" name="idcategory" value="' . $id . '">
-                        <button type="submit" name="action" value="showCategory">Voir</button>
-                    </form>
-                </td>
-            </tr>
-            ';
+            $content .= (new PostItemsLayout())->category($category,200);
         }
         $content .= <<<HTML
-        </tbody>
-    </table>
-</section>
-
-
+    </section>
 HTML;
         return $content;
     }
@@ -98,6 +41,6 @@ HTML;
             session_start();
         }
 
-        (new Layout('Homepage', $this->setContent($fiveLast)))->show();
+        (new Layout('Page d\'accueil', $this->setContent($fiveLast)))->show();
     }
 }

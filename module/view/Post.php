@@ -6,6 +6,7 @@ class Post
     {
         $id = $ticket->getIdTicket();
         $title = $ticket->getTitle();
+        $date = date('d/m/Y H\hi', strtotime($ticket->getDate()));
         if ($username = $ticket->getUsername()) {
             $frontname = $ticket->getFrontnameByUsername($username);
         } else {
@@ -13,51 +14,56 @@ class Post
         }
         $message = $ticket->getMessage();
         $requestCategories = $ticket->getCategories();
-        $categories = '';
+        $categories = '<ul class="added">';
         if (isset($requestCategories)) {
             foreach ($requestCategories as $category) {
-                $categories .= $category->getName() . '<br>';
+                $categories .= '<li>' . $category->getName() . '</li>';
             }
         }
+        $categories .= '</ul>';
         $requestMentions = $ticket->getMentions();
-        $mentions = '';
+        $mentions = '<ul class="added">';
         if (isset($requestMentions)) {
             foreach ($requestMentions as $mention) {
-                $mentions .= $mention . '<br>';
+                $mentions .= '<li>' . $mention . '</li>';
             }
         }
+        $mentions .= '</ul>';
         $comments = $ticket->getComments();
+        $importantComments = $ticket->getImportantComments();
 
-        $content = '';
+        $content = '<section class="postItems">';
+
+        $content .=
+            '<small>' . $frontname . ' - ' . $date . '</small>
+<p id="ticketTitle">' . $title . '</p>
+
+<p class="message">' . $message . '</p> 
+
+
+<small class="listName">Mentions :</small>
+' . $mentions . '
+
+<small class="listName">Catégories :</small>
+' . $categories;
+
+
         if (isset($_SESSION['suid']) and $_SESSION['user']->getDeactivated() === 0) {
             if ($username === $_SESSION['user']->getUsername()) {
                 $content .= '<form method="post" action="index.php">
     <input type="hidden" name="idticket" value="' . $id . '">
     <button type="submit" name="action" value="toModifyTicket">Modifier</button>';
-                $content .= '<button type="submit" name="action" value="deleteTicket">Supprimer</button> <br>
+                $content .= '<button type="submit" name="action" value="deleteTicket">Supprimer</button> 
 </form>';
             } elseif ($_SESSION['user']->getAdministrator() === 1) {
                 $content .= '<form method="post" action="index.php">
     <input type="hidden" name="idticket" value="' . $id . '">';
-                $content .= '<button type="submit" name="action" value="deleteTicket">Supprimer</button> <br>
+                $content .= '<button type="submit" name="action" value="deleteTicket">Supprimer</button> 
 </form>';
             }
 
         }
-        $content .= '
-<label>Titre : ' . $title . '</label><br>
-<label>Auteur: ' . $frontname . '</label><br>
-<label>Message :<br>
-' . $message . ' <br>
-</label>
-<label>
-Mentions :<br>
-' . $mentions . '
-</label>
-<label>
-Catégories :<br>
-' . $categories . '
-</label>';
+        $content .= '</section>';
         if (isset($_SESSION['suid'])) {
             $content .= '
 <form class="userForm" method="post" action="index.php">
@@ -74,72 +80,42 @@ Catégories :<br>
     <ul class="added" id="addedUsers">
     
     </ul>
-    <div class="buttonContainer">
+    <div class="buttonContainer">';
+            if ($_SESSION['user']->getAdministrator()) {
+                $content .= '
+        <div>
+            <label for="important">Important</label>
+            <input id="important" type="checkbox" name="important">
+        </div>';
+            }
+            $content .= '
         <button type="submit" name="action" value="comment">Commenter</button>
     </div>
 </form>';
         }
+        if (isset($searchedComment)) {
+            $content .= '
+<section class="commentList"><h2>Commentaire recherché</h2>
+<ul class="commentList">';
+            $content .= (new PostItemsLayout())->commentUnderTicket($searchedComment, 1);
+            $content .= '
+</ul></section>';
+        }
         $content .= '
-<label>Commentaires :</label>
+<section class="commentList"><h2>Commentaires importants</h2>
 <ul>';
 
-        if (isset($searchedComment)) {
-            $content .= '<section class="comment">';
-            if (isset($_SESSION['suid']) and
-                $_SESSION['user']->getDeactivated() === 0 and
-                ($_SESSION['user']->getUsername() === $searchedComment->getUsername() or
-                    $_SESSION['user']->getAdministrator() === 1)) {
-                $content .= '<form method="post" action="index.php">';
-            }
-            $content .= '<label>Commentaire recherché:</label><br>' . PHP_EOL .
-                $searchedComment->getFrontnameByUsername() . ' :<br>' . PHP_EOL . '
-<label>le : ' . date('d/m/Y H\hi', strtotime($searchedComment->getDate())) . '</label><br>
-            <p>' . $searchedComment->getText() . '</p><br>
-
-<ul class="suggestions userSuggestions ">
-
-</ul>
-<label for="">Mentions :</label><br>
-<ul id="mentions" class=" added addedUsers">';
-            if (isset($_SESSION['suid']) and
-                $_SESSION['user']->getDeactivated() === 0 and
-                ($_SESSION['user']->getUsername() === $searchedComment->getUsername() or
-                    $_SESSION['user']->getAdministrator() === 1)) {
-                $content .= $this->displayButtons($searchedComment, $ticket);
-            }
-            $content .= '</section>';
+        foreach ($importantComments as $comment) {
+            $content .= (new PostItemsLayout())->commentUnderTicket($comment);
         }
+        $content .= '</ul>
+</section>
+<section class="commentList"><h2>Commentaires</h2>
+<ul>';
+
         foreach ($comments as $comment) {
 
-            $content .= '<li class="comment">';
-            if (isset($_SESSION['suid']) and
-                $_SESSION['user']->getDeactivated() === 0 and
-                ($_SESSION['user']->getUsername() === $comment->getUsername() or
-                    $_SESSION['user']->getAdministrator() === 1)) {
-                $content .= '<form method="post" action="index.php">';
-            }
-
-
-            $content .= $comment->getFrontnameByUsername() . ' :<br>' . PHP_EOL . '
- <label>le : ' . date('d/m/Y H\hi', strtotime($comment->getDate())) . '</label><br>
-<p>' . $comment->getText() . '</p><br>
-
-<ul class="suggestions userSuggestions">
-
-</ul>
-<label>Mentions :</label><br>
-<ul class="added addedUsers">';
-            foreach ($comment->getMentions() as $mention) {
-                $content .= '<li>' . $mention . '<input type="hidden" name="selectedUsers[]" value="' . $mention . '"></li>';
-            }
-            $content .= '</ul>';
-            if (isset($_SESSION['suid']) and
-                $_SESSION['user']->getDeactivated() === 0 and
-                ($_SESSION['user']->getUsername() === $comment->getUsername() or
-                    $_SESSION['user']->getAdministrator() === 1)) {
-                $content .= $this->displayButtons($comment, $ticket);
-            }
-            $content .= '</li>';
+            $content .= (new PostItemsLayout())->commentUnderTicket($comment);
         }
         $content .= '</ul>
 <script src="/_assets/lib/http_ajax.googleapis.com_ajax_libs_jquery_2.1.1_jquery.js"></script>
@@ -156,22 +132,4 @@ Catégories :<br>
         (new Layout($ticket->getTitle(), $this->setContent($ticket, $searchedComment)))->show();
     }
 
-    public function displayButtons($comment, $ticket): string
-    {
-        if ($_SESSION['user']->getUsername() === $comment->getUsername()) {
-            $content = '
-    <button class="modifyComment">Modifier</button><br>
-    <button type="submit" name="action" value="deleteComment">Supprimer</button><br>
-    <input type="hidden" name="idcomment" value="' . $comment->getIdComment() . '">
-    <input type="hidden" name="idticket" value="' . $ticket->getIdTicket() . '">
-</form>';
-
-        } elseif ($_SESSION['user']->getAdministrator() === 1) {
-            $content = '<button type="submit" name="action" value="deleteComment">Supprimer</button><br>
-    <input type="hidden" name="idcomment" value="' . $comment->getIdComment() . '">
-    <input type="hidden" name="idticket" value="' . $ticket->getIdTicket() . '">
-</form>';
-        }
-        return $content;
-    }
 }

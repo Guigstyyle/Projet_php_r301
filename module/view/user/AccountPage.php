@@ -9,7 +9,9 @@ class AccountPage
         $mail = $user->getMail();
         $lastconnection = date('d/m/y H:i', strtotime($user->getLastconnection()));
         return <<<HTML
+
 <small>Dernière connexion : {$lastconnection}</small>
+<h2>Modifier mes informations</h2>
 <form class="userForm" id="editProfilForm" method="post" action="index.php">
 
     <label for="username">Nom d'utilisateur :</label>
@@ -29,7 +31,7 @@ class AccountPage
     </div>
 </form>
 
-<label>Changer de mot passe</label>
+<h2>Changer de mot passe</h2>
 <form class="userForm" id="changePasswordForm" method="post" action="index.php">
     <label for="password">Mot de passe actuel :</label>
     <input type="password" name="password" placeholder="Mot de passe actuel" maxlength="255">
@@ -44,6 +46,7 @@ class AccountPage
         <button type="submit" name="action" value="changePassword">Changer de mot de passe</button>
     </div>
 </form>
+
 HTML;
     }
 

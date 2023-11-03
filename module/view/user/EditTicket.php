@@ -6,12 +6,15 @@ require_once __DIR__ . '/../Layout.php';
 class EditTicket
 {
     public function setContent($ticket): string
+
     {
         $title = $ticket->getTitle();
         $message = $ticket->getMessage();
+        $important = $ticket->getImportant();
         $id = $ticket->getIdTicket();
         $mentions = $ticket->getMentions();
         $categories = $ticket->getCategories();
+
         $content = '
 <form class="userForm" method="post" action="index.php">
     <input type="hidden" name="idTicket" value="' . $id . '">
@@ -29,6 +32,7 @@ class EditTicket
     <label for="addedUsers">Utilisateurs mentioné :</label>
     <ul class="added" id="addedUsers">
     ';
+
         foreach ($mentions as $mention) {
             $content .= '<li>' . $mention . '<input type="hidden" name="selectedUsers[]" value="' . $mention . '"></li>';
         }
@@ -49,7 +53,19 @@ class EditTicket
 
         $content .= '
     </ul>
-    <div class="buttonContainer">
+    <div class="buttonContainer">';
+        if ($_SESSION['user']->getAdministrator()) {
+            $content .= '
+        <div>
+            <label for="important">Important</label>';
+            if ($important) {
+                $content .= '<input id="important" type="checkbox" name="important" checked>';
+            } else {
+                $content .= '<input id="important" type="checkbox" name="important">';
+            }
+            $content.='</div>';
+        }
+        $content .= '
         <button type="submit" name="action" value="modifyTicket">Publier</button>
     </div>
 </form>

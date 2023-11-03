@@ -22,10 +22,11 @@ class Layout
         <!DOCTYPE html>
         <html lang="fr">
         <head>
-            <meta charset="utf-8"/>
             <title><?= $this->title; ?></title>
-            <meta name="description"
-                  content="Ceci est la page d'accueil de notre site sous forme de mur social de type blog.">
+            <meta
+                charset="UTF-8"
+                name="description"
+                content="Ceci est la page d'accueil de notre site sous forme de mur social de type blog."/>
             <link rel="stylesheet" type="text/css" href="_assets/styles/style.css">
         </head>
         <body>
@@ -80,11 +81,12 @@ class Layout
             </ul>
 
         </form>
+        <section class="pageContainer">
         <h1><?= $this->title; ?></h1>
 
 
         <?= $this->content; ?>
-
+        </section>
         <footer>
             <hr/>
             <h3>Contact</h3>

@@ -18,7 +18,7 @@ class CommentController
         }
         $action = $_POST['action'];
         if ($action === 'comment') {
-            if ($comment = $this->comment()) {
+            if ($this->comment()) {
                 $ticket = new TicketModel($_POST['idticket']);
                 (new Post())->show($ticket);
             }
@@ -27,7 +27,8 @@ class CommentController
         if ($action === 'modifyComment') {
             if ($this->modifyComment()) {
                 $ticket = new TicketModel($_POST['idticket']);
-                (new Post())->show($ticket);
+                $comment = new CommentModel($_POST['idcomment']);
+                (new Post())->show($ticket,$comment);
             }
         }
         if ($action === 'deleteComment') {
@@ -46,6 +47,16 @@ class CommentController
             (new Post())->show($ticket, $comment);
 
         }
+        if ($action === 'makeImportant'){
+            $comment = new CommentModel($_POST['idcomment']);
+            $ticket = new TicketModel($comment->getIdTicket());
+            if ($comment->getImportant()){
+                $comment->setNotImportant();
+            } else {
+                $comment->setImportant();
+            }
+            (new Post())->show($ticket, $comment);
+        }
     }
 
     /**
@@ -63,14 +74,16 @@ class CommentController
         $user = $_SESSION['user'];
         $idTicket = $_POST['idticket'];
 
+        $important = isset($_POST['important']) ? 1 : 0;
+
         $mentions = null;
         if (isset($_POST['selectedUsers'])) {
             $mentions = $_POST['selectedUsers'];
         }
         if (isset($mentions)) {
-            $comment = new CommentModel($user->getUsername(), $text, $idTicket, $mentions);
+            $comment = new CommentModel($user->getUsername(), $text, $idTicket, $mentions, $important);
         } else {
-            $comment = new CommentModel($user->getUsername(), $text, $idTicket);
+            $comment = new CommentModel($user->getUsername(), $text, $idTicket, $important);
         }
         return $comment;
 
@@ -100,7 +113,13 @@ class CommentController
             (new ErrorPage())->show($exception->getMessage());
             return false;
         }
-
+        $important = isset($_POST['important']) ? 1 : 0;
+        if ($important === 1){
+            $comment->setImportant();
+        }
+        else{
+            $comment->setNotImportant();
+        }
         $comment->setText($text);
         if (isset($_POST['selectedUsers'])) {
             $comment->updateMentions($_POST['selectedUsers']);

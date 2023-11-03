@@ -26,7 +26,7 @@ form.nav {
     margin: 0 auto;
     background-color: #366a95;
     position: sticky;
-    top: 0px;
+    top: 0;
 }
 
 /* Spécificités du menu */
@@ -58,7 +58,7 @@ form.nav button {
     border-radius: 0;
     border: none;
     border-bottom: 2px solid transparent;
-    padding: 10px 0px;
+    padding: 10px 0;
 }
 
 form.nav a {
@@ -66,7 +66,7 @@ form.nav a {
     text-decoration: none;
     color: ghostwhite;
     border-bottom: 2px solid transparent;
-    padding: 10px 0px;
+    padding: 10px 0;
 }
 
 .nav button:hover {
@@ -81,7 +81,7 @@ form.nav a {
 
 .sous {
     display: none;
-    box-shadow: 0px 1px 2px #CCC;
+    box-shadow: 0 1px 2px #CCC;
     background-color: darkcyan;
     position: absolute;
     list-style-type: none;
@@ -116,10 +116,9 @@ form.nav a {
     padding: 0;
 }
 #suggestionsAll ul {
-    margin: 0;
     padding: 0;
     list-style-type: none;
-    margin-bottom: 10px;
+    margin: 0 0 10px;
 }
 #suggestionsAll ul button{
     padding: 10px;
@@ -130,10 +129,10 @@ form.nav a {
 
 .suggestions{
     display: none;
-    background-color: rgba(12, 28, 44, 0.53);
+    background-color: RGBa(0, 0, 0, 0.1);
     position: relative;
     list-style-type: none;
-    width: 100%;
+    width: 95%;
     padding-left: 0;
     border-radius: 5px;
     border-color: cyan;
@@ -141,6 +140,12 @@ form.nav a {
     border-style: solid;
     z-index: 1000;
 
+}
+.suggestions li{
+    width: 100%;
+}
+.suggestions li:hover{
+    background-color: RGBa(0, 0, 0, 0.1);
 }
 .searchBar{
     margin-bottom: 0;
@@ -150,8 +155,8 @@ form.nav a {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 0;
-    margin-top: 0;
+    padding: 5px;
+    margin: 10px auto;
     list-style-type: none;
     max-height: 500px;
     overflow-y: auto;
@@ -166,7 +171,7 @@ form.nav a {
 .added {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     padding: 0;
     margin-top: 0;
     list-style-type: none;
@@ -174,9 +179,9 @@ form.nav a {
 }
 .added li {
     background-color: rgba(12, 28, 44, 0.53);
+    font-size: 12px;
     list-style-type: none;
-    width: 100%;
-    padding-left: 0;
+    padding: 2px;
     border-radius: 5px;
     border-color: cyan;
     border-width: 0.1rem;
@@ -198,8 +203,49 @@ form.nav a {
     border-bottom: none;
     background-color: RGBa(200, 200, 200, 0.1);
 }
+.postItems {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    border-color: cyan;
+    border-style: solid;
+    border-width: 0.1rem;
+    background-color: RGBa(0, 0, 0, 0.1);
+    margin: 10px;
+    padding: 5px;
+}
+.postItems form{
+    display: flex;
+    justify-content: space-evenly;
+}
+.postItemsTitle{
+    font-size: 24px;
+    margin: 0;
+}
+.postItems p{
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+.message{
+    margin: 0;
+    padding: 2%;
+    color: #c9c9dd;
+}
+.listName{
+    display: block;
+}
+.listName + ul {
 
+    display: none;
+}
+.listName:hover + ul, .listName + ul:hover{
+    display: flex;
+}
 
+small{
+    color: #888888;
+}
 button {
 
     background: RGBa(0,0,0,0.1);
@@ -218,7 +264,7 @@ button:hover {
 
 h2 {
     text-align: center;
-    margin-bottom: 40px;
+    font-size: 24px;
 }
 textarea{
     display: block;
@@ -286,6 +332,8 @@ hr {
 }
 .userForm{
     background-color: RGBa(150,150,150,0.1);
+    width: 100%;
+    margin: 10px;
     border-width: 0.1rem;
     border-color: cyan;
     border-style: solid;
@@ -295,7 +343,57 @@ hr {
     display: flex;
     justify-content: space-evenly;
     align-content: center;
+}
+.buttonContainer div{
+    display: flex;
+    justify-content: space-evenly;
+    align-content: center;
+}
+.commentList ul{
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
 
+}
+.comment{
+    width: 100%;
+    border-width: 0.1rem;
+    border-style: solid;
+    border-color: cyan;
+    background-color: RGBa(0, 0, 0, 0.1);
+    margin: 10px;
+    padding: 10px;
+}
+.comment p{
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+.pageContainer{
+    width: 30%;
+}
+.pageContainer section ul{
+    padding: 0;
+}
+#searchedComment{
+    border-color: gold;
+}
+.user{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    border-color: cyan;
+    border-style: solid;
+    border-width: 0.1rem;
+    background-color: RGBa(0, 0, 0, 0.1);
+    margin: 10px;
+    padding: 5px;
+}
+.user ul{
+    list-style-type: none;
+}
+.important{
+    border-color: red;
 }
 
 /* Changer la taille max sur une ligne pour les commentaires et postes */

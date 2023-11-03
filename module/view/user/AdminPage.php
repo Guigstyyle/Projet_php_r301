@@ -15,6 +15,7 @@ class AdminPage
     public function setContent(): string
     {
         return <<<HTML
+
 <section>
     <form class="userForm" method="post" action="index.php">
         <div class="buttonContainer">
@@ -54,6 +55,7 @@ class AdminPage
         </div>
     </form>
 </section>
+
 HTML;
     }
 

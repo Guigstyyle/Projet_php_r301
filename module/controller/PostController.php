@@ -60,20 +60,25 @@ class PostController
             $title = $_POST['title'];
             $message = $_POST['message'];
             $username = $_SESSION['user']->getUsername();
+            if (isset($_POST['important'])) {
+                $important = 1;
+            } else {
+                $important = 0;
+            }
             if (isset($_POST['selectedCategories'])) {
                 $categories = $_POST['selectedCategories'];
                 if (!isset($_POST['selectedUsers'])) {
-                    $ticket = new TicketModel($title, $message, $username, $categories);
+                    $ticket = new TicketModel($title, $message, $username, $categories, $important);
                 } else {
                     $mentionedUsers = $_POST['selectedUsers'];
-                    $ticket = new TicketModel($title, $message, $username, $categories, $mentionedUsers);
+                    $ticket = new TicketModel($title, $message, $username, $categories, $mentionedUsers, $important);
                 }
             } else {
                 if (isset($_POST['selectedUsers'])) {
                     $mentionedUsers = $_POST['selectedUsers'];
-                    $ticket = new TicketModel($title, $message, $username, null, $mentionedUsers);
+                    $ticket = new TicketModel($title, $message, $username, null, $mentionedUsers, $important);
                 } else {
-                    $ticket = new TicketModel($title, $message, $username);
+                    $ticket = new TicketModel($title, $message, $username, $important);
                 }
             }
             return $ticket;
@@ -109,6 +114,11 @@ class PostController
         }
         $ticket->setTitle($title);
         $ticket->setMessage($message);
+        if (isset($_POST['important'])) {
+            $ticket->setImportant();
+        } else {
+            $ticket->setNotImportant();
+        }
         if (isset($_POST['selectedUsers'])) {
             $ticket->updateMentions($_POST['selectedUsers']);
         } else {

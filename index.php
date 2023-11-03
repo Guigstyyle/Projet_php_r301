@@ -64,7 +64,8 @@ try {
             $action === 'modifyComment' or
             $action === 'deleteComment' or
             $action === 'toSearchComment' or
-            $action === 'showComment') {
+            $action === 'showComment' or
+            $action === 'makeImportant') {
             (new CommentController())->execute();
         }
         if ($action === 'toSearch') {

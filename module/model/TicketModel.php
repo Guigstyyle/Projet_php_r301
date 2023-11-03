@@ -9,6 +9,7 @@ class TicketModel
     private $message;
     private $date;
     private $username;
+    private $important;
 
     /**
      * @description Base constructor that calls the appropriate one
@@ -41,25 +42,27 @@ class TicketModel
         $this->message = $result['message'];
         $this->date = $result['date'];
         $this->username = $result['username'];
-    }
-
-    public function __construct3($title, $message, $username)
-    {
-        $this->constructOnNewTicket($title, $message, $username);
+        $this->important = $result['important'];
 
     }
 
-    public function __construct4($title, $message, $username, $categories)
+    public function __construct4($title, $message, $username, $important)
     {
-        $this->constructOnNewTicket($title, $message, $username);
+        $this->constructOnNewTicket($title, $message, $username, $important);
+
+    }
+
+    public function __construct5($title, $message, $username, $categories, $important)
+    {
+        $this->constructOnNewTicket($title, $message, $username, $important);
 
         $this->addCategories($categories);
     }
 
-    public function __construct5($title, $message, $username, $categories, $mentions)
+    public function __construct6($title, $message, $username, $categories, $mentions, $important)
     {
 
-        $this->constructOnNewTicket($title, $message, $username);
+        $this->constructOnNewTicket($title, $message, $username, $important);
 
         if (isset($categories)) {
             $this->addCategories($categories);
@@ -74,18 +77,19 @@ class TicketModel
      * @param $username
      * @return void
      */
-    public function constructOnNewTicket($title, $message, $username): void
+    public function constructOnNewTicket($title, $message, $username, $important): void
     {
         $this->title = $title;
         $this->message = $message;
         $this->date = date('Y-m-d H:i:s');
         $this->username = $username;
         $pdo = DatabaseConnection::connect();
-        $query = $pdo->prepare('INSERT INTO TICKET (title,message,date,username) VALUES (:title,:message,:date,:username)');
+        $query = $pdo->prepare('INSERT INTO TICKET (title,message,date,username,important) VALUES (:title,:message,:date,:username,:important)');
         $query->bindValue(':title', $title);
         $query->bindValue(':message', $message);
         $query->bindValue(':date', $this->date);
         $query->bindValue(':username', $username);
+        $query->bindValue(':important', $important);
         $query->execute();
 
         $query = $pdo->prepare('SELECT idticket FROM TICKET WHERE title = :title');
@@ -179,6 +183,19 @@ class TicketModel
         return $mentions;
     }
 
+    public function getImportantComments(): array
+    {
+        $pdo = DatabaseConnection::connect();
+        $query = $pdo->prepare('SELECT * FROM COMMENT WHERE idticket = :idTicket AND important = 1 ORDER BY date DESC ');
+        $query->bindValue(':idTicket', $this->idTicket);
+        $query->execute();
+        $comments = array();
+        while ($comment = $query->fetch(PDO::FETCH_ASSOC)) {
+
+            $comments[] = new CommentModel($comment['idcomment']);
+        }
+        return $comments;
+    }
     public function getComments(): array
     {
         $pdo = DatabaseConnection::connect();
@@ -231,6 +248,11 @@ class TicketModel
         return $this->message;
     }
 
+    public function getImportant()
+    {
+        return $this->important;
+    }
+
     public function getDate()
     {
         return $this->date;
@@ -261,6 +283,23 @@ class TicketModel
         $query->execute();
     }
 
+    public function setImportant()
+    {
+        $this->important = 1;
+        $pdo = DatabaseConnection::connect();
+        $query = $pdo->prepare('UPDATE TICKET SET important = 1 WHERE idticket = :idTicket');
+        $query->bindValue(':idTicket', $this->idTicket);
+        $query->execute();
+    }
+
+    public function setNotImportant()
+    {
+        $this->important = 0;
+        $pdo = DatabaseConnection::connect();
+        $query = $pdo->prepare('UPDATE TICKET SET important = 0 WHERE idticket = :idTicket');
+        $query->bindValue(':idTicket', $this->idTicket);
+        $query->execute();
+    }
 
     /**
      * @param $message
@@ -284,7 +323,7 @@ class TicketModel
     {
         $pdo = DatabaseConnection::connect();
         $query = $pdo->prepare('SELECT * FROM TICKET WHERE UPPER(title) LIKE UPPER(:like) or 
-                           UPPER(message) LIKE UPPER(:like) ORDER BY UPPER(title)');
+                           UPPER(message) LIKE UPPER(:like) ORDER BY date DESC');
         $query->bindValue(':like', '%' . $like . '%');
         $query->execute();
 

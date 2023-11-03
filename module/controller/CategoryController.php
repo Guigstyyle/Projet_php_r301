@@ -11,6 +11,9 @@ require_once __DIR__ . '/../view/ErrorPage.php';
 
 class CategoryController
 {
+    /**
+     * @throws Exception
+     */
     public function execute()
     {
         $action = $_POST['action'];

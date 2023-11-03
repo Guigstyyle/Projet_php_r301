@@ -12,7 +12,7 @@ class TicketModel
     private $important;
 
     /**
-     * @description Base constructor that calls the appropriate one
+     * @description Base constructor that calls the appropriate one.
      */
     public function __construct()
     {
@@ -28,7 +28,11 @@ class TicketModel
         }
     }
 
-
+    /**
+     * @param $id
+     * @return void
+     * @description Used for already existing tickets, when an operation on an existing ticket is needed.
+     */
     public function __construct1($id)
     {
         $this->idTicket = $id;
@@ -46,12 +50,31 @@ class TicketModel
 
     }
 
+    /**
+     * @param $title
+     * @param $message
+     * @param $username
+     * @param $important
+     * @return void
+     * @uses TicketModel::constructOnNewTicket() to initialize attributes and register the ticket to the database.
+     * @description Called on a new ticket that has no categories nor mentions.
+     */
     public function __construct4($title, $message, $username, $important)
     {
         $this->constructOnNewTicket($title, $message, $username, $important);
 
     }
 
+    /**
+     * @param $title
+     * @param $message
+     * @param $username
+     * @param $categories
+     * @param $important
+     * @return void
+     * @uses TicketModel::constructOnNewTicket() to initialize attributes and register the ticket to the database.
+     * @description Called on a new ticket that has categories but no mentions.
+     */
     public function __construct5($title, $message, $username, $categories, $important)
     {
         $this->constructOnNewTicket($title, $message, $username, $important);
@@ -59,6 +82,17 @@ class TicketModel
         $this->addCategories($categories);
     }
 
+    /**
+     * @param $title
+     * @param $message
+     * @param $username
+     * @param $categories
+     * @param $mentions
+     * @param $important
+     * @return void
+     * @uses TicketModel::constructOnNewTicket() to initialize attributes and register the ticket to the database.
+     * @description Called on a new ticket that has mentions, if it has no categories call this constructor with null instead of the usual categories array.
+     */
     public function __construct6($title, $message, $username, $categories, $mentions, $important)
     {
 
@@ -75,7 +109,9 @@ class TicketModel
      * @param $title
      * @param $message
      * @param $username
+     * @param $important
      * @return void
+     * @description initialize attributes and register the ticket to the database.
      */
     public function constructOnNewTicket($title, $message, $username, $important): void
     {
@@ -99,6 +135,11 @@ class TicketModel
         $this->idTicket = $result['idticket'];
     }
 
+    /**
+     * @param $categoryName
+     * @return void
+     * @description adds one category to the database.
+     */
     public function addCategory($categoryName)
     {
         $pdo = DatabaseConnection::connect();
@@ -109,6 +150,12 @@ class TicketModel
         $query->execute();
     }
 
+    /**
+     * @param $categories
+     * @return void
+     * @uses TicketModel::addCategory() to add them one by one.
+     * @description adds all categories to the database.
+     */
     public function addCategories($categories)
     {
         foreach ($categories as $category) {
@@ -116,12 +163,23 @@ class TicketModel
         }
     }
 
+    /**
+     * @param $categories
+     * @return void
+     * @uses TicketModel::removeCategories() to remove old mentions.
+     * @uses TicketModel::addCategories() to add the new ones.
+     * @description update all the mentions of the ticket.
+     */
     public function updateCategories($categories)
     {
         $this->removeCategories();
         $this->addCategories($categories);
     }
 
+    /**
+     * @return void
+     * @description deletes all the categories of the ticket from the database.
+     */
     public function removeCategories()
     {
         $pdo = DatabaseConnection::connect();
@@ -130,13 +188,23 @@ class TicketModel
         $query->execute();
     }
 
+    /**
+     * @param $mentions
+     * @return void
+     * @uses TicketModel::addMentions() to add them one by one.
+     * @description adds all mentions to the database.
+     */
     public function addMentions($mentions)
     {
         foreach ($mentions as $mention) {
             $this->addMention($mention);
         }
     }
-
+    /**
+     * @param $mention
+     * @return void
+     * @description adds one mention to the database.
+     */
     public function addMention($mention)
     {
         $pdo = DatabaseConnection::connect();
@@ -146,12 +214,23 @@ class TicketModel
         $query->execute();
     }
 
+    /**
+     * @param $mentions
+     * @return void
+     * @uses TicketModel::removeMentions() to remove old mentions.
+     * @uses TicketModel::addMentions() to add the new ones.
+     * @description update all the mentions of the ticket.
+     */
     public function updateMentions($mentions)
     {
         $this->removeMentions();
         $this->addMentions($mentions);
     }
 
+    /**
+     * @return void
+     * @description deletes all the mentions of the ticket from the database.
+     */
     public function removeMentions()
     {
         $pdo = DatabaseConnection::connect();
@@ -160,6 +239,10 @@ class TicketModel
         $query->execute();
     }
 
+    /**
+     * @return string
+     * @description gets the frontname of a user using its username.
+     */
     public function getFrontnameByUsername(): string
     {
         if (!isset($this->username)) {
@@ -169,6 +252,10 @@ class TicketModel
         return $user->getFrontname();
     }
 
+    /**
+     * @return array
+     * @description gets all the mentions of the ticket.
+     */
     public function getMentions(): array
     {
         $pdo = DatabaseConnection::connect();
@@ -183,6 +270,10 @@ class TicketModel
         return $mentions;
     }
 
+    /**
+     * @return array
+     * @description gets all comments marked as important from the ticket.
+     */
     public function getImportantComments(): array
     {
         $pdo = DatabaseConnection::connect();
@@ -196,6 +287,10 @@ class TicketModel
         }
         return $comments;
     }
+    /**
+     * @return array
+     * @description gets all comments from the ticket.
+     */
     public function getComments(): array
     {
         $pdo = DatabaseConnection::connect();
@@ -210,6 +305,10 @@ class TicketModel
         return $comments;
     }
 
+    /**
+     * @return array
+     * @description gets all the categories of the ticket.
+     */
     public function getCategories(): array
     {
         $pdo = DatabaseConnection::connect();
@@ -226,43 +325,66 @@ class TicketModel
     /**
      * @param $title
      * @return bool
-     * @description ensures that the ticket title is less than 101 characters
+     * @description ensures that the ticket title is less than 101 characters.
      */
     public static function titleLenLimit($title): bool
     {
         return strlen($title) < 101;
     }
 
-    public function getIdTicket()
+    /**
+     * @return int
+     */
+    public function getIdTicket(): int
     {
         return $this->idTicket;
     }
 
-    public function getTitle()
+    /**
+     * @return string
+     */
+    public function getTitle() : string
     {
         return $this->title;
     }
 
-    public function getMessage()
+    /**
+     * @return string
+     */
+    public function getMessage(): string
     {
         return $this->message;
     }
 
-    public function getImportant()
+    /**
+     * @return int
+     * @description get the state of the ticket important(1) or not important(0).
+     */
+    public function getImportant(): int
     {
         return $this->important;
     }
 
-    public function getDate()
+    /**
+     * @return string
+     */
+    public function getDate(): string
     {
         return $this->date;
     }
 
-    public function getUsername()
+    /**
+     * @return string
+     */
+    public function getUsername(): string
     {
         return $this->username;
     }
 
+    /**
+     * @param $title
+     * @return void
+     */
     public function setTitle($title): void
     {
         $this->title = $title;
@@ -273,6 +395,10 @@ class TicketModel
         $query->execute();
     }
 
+    /**
+     * @param $message
+     * @return void
+     */
     public function setMessage($message): void
     {
         $this->message = $message;
@@ -283,6 +409,10 @@ class TicketModel
         $query->execute();
     }
 
+    /**
+     * @return void
+     * @description set the state of the ticket to important (1).
+     */
     public function setImportant()
     {
         $this->important = 1;
@@ -292,6 +422,10 @@ class TicketModel
         $query->execute();
     }
 
+    /**
+     * @return void
+     * @description set the state of the ticket to not important (0).
+     */
     public function setNotImportant()
     {
         $this->important = 0;
@@ -304,13 +438,18 @@ class TicketModel
     /**
      * @param $message
      * @return bool
-     * @description ensures that the ticket message is less than 3001 characters
+     * @description ensures that the ticket message is less than 3001 characters.
      */
     public static function messageLenLimit($message): bool
     {
         return strlen($message) < 2001;
     }
 
+    /**
+     * @param $idticket
+     * @return bool
+     * @description deletes a ticket from the database based on its id.
+     */
     public static function deleteTicket($idticket): bool
     {
         $pdo = DatabaseConnection::connect();
@@ -319,7 +458,12 @@ class TicketModel
         return $query->execute();
     }
 
-    public static function getAllTicketsLike($like)
+    /**
+     * @param $like
+     * @return array
+     * @description gets all the tickets that have $like in them.
+     */
+    public static function getAllTicketsLike($like): array
     {
         $pdo = DatabaseConnection::connect();
         $query = $pdo->prepare('SELECT * FROM TICKET WHERE UPPER(title) LIKE UPPER(:like) or 
@@ -334,6 +478,10 @@ class TicketModel
         return $tickets;
     }
 
+    /**
+     * @return array
+     * @description gets the five most recent tickets
+     */
     public static function getFiveLast(): array
     {
         $pdo = DatabaseConnection::connect();

@@ -2,7 +2,13 @@
 
 class PostItemsLayout
 {
-    public function ticket($ticket, $limit = 0): string
+    /**
+     * @param $ticket
+     * @param int $limit max displayed description length.
+     * @return string
+     * @description to render tickets
+     */
+    public function ticket($ticket,int $limit = 0): string
     {
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
@@ -68,7 +74,13 @@ class PostItemsLayout
         return $content;
     }
 
-    public function category($category, $limit = 0): string
+    /**
+     * @param $category
+     * @param int $limit max displayed description length.
+     * @return string
+     * @description to render categories.
+     */
+    public function category($category, int $limit = 0): string
     {
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
@@ -99,7 +111,13 @@ class PostItemsLayout
         return $content;
     }
 
-    public function comment($comment, $limit = 0): string
+    /**
+     * @param $comment
+     * @param int $limit max displayed description length.
+     * @return string
+     * @description to render comments (not under tickets).
+     */
+    public function comment($comment, int $limit = 0): string
     {
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
@@ -142,11 +160,15 @@ class PostItemsLayout
         return $content;
     }
 
-    public function user($user)
+    /**
+     * @param $user
+     * @return string
+     * @description to render user.
+     */
+    public function user($user): string
     {
         $username = $user->getUsername();
         $mail = $user->getMail();
-        $password = $user->getPassword();
         $frontname = $user->getFrontname();
         $firstconnection = $user->getFirstconnection();
         $lastconnection = $user->getLastconnection();
@@ -185,7 +207,13 @@ class PostItemsLayout
 
     }
 
-    public function commentUnderTicket($comment, $isSearched = 0)
+    /**
+     * @param $comment
+     * @param $isSearched
+     * @return string
+     * @description to render comment under tickets.
+     */
+    public function commentUnderTicket($comment, $isSearched = 0): string
     {
         if ($isSearched) {
             if ($comment->getImportant()) {
@@ -231,6 +259,11 @@ class PostItemsLayout
         return $content;
     }
 
+    /**
+     * @param $comment
+     * @return string
+     * @description logic to display the correct buttons for different users.
+     */
     function displayCommentButtons($comment): string
     {
         $content = '';

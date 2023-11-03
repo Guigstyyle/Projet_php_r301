@@ -10,7 +10,7 @@ class CategoryModel
     private $description;
 
     /**
-     * @description Base constructor that calls the appropriate one
+     * @description Base constructor that calls the appropriate one.
      */
     public function __construct()
     {
@@ -30,7 +30,7 @@ class CategoryModel
     /**
      * @param $idCategory
      * @return void
-     * @description Used when updating the database
+     * @description Used when updating the database.
      */
     public function __construct1($idCategory)
     {
@@ -49,7 +49,7 @@ class CategoryModel
      * @param $name
      * @param $description
      * @return void
-     * @description Used when creating a new category
+     * @description Used when creating a new category.
      */
     public function __construct2($name, $description)
     {
@@ -112,7 +112,7 @@ class CategoryModel
 
     /**
      * @return bool
-     * @description update the description ,the name or both in the database
+     * @description update the description ,the name or both in the database.
      */
     public function updateCategory(): bool
     {
@@ -127,7 +127,7 @@ class CategoryModel
     /**
      * @param $id
      * @return bool
-     * @description Delete a category from the database based on its id
+     * @description Delete a category from the database based on its id.
      */
     public static function DeleteFromDatabaseById($id): bool
     {
@@ -140,7 +140,7 @@ class CategoryModel
     /**
      * @param $name
      * @return bool
-     * @description ensures that the category name is less than 51 characters
+     * @description ensures that the category name is less than 51 characters.
      */
     public static function nameLenLimit($name): bool
     {
@@ -150,7 +150,7 @@ class CategoryModel
     /**
      * @param $description
      * @return bool
-     * @description ensures that the category description is less than 2000 characters
+     * @description ensures that the category description is less than 2000 characters.
      */
     public static function descriptionLenLimit($description): bool
     {
@@ -160,7 +160,7 @@ class CategoryModel
     /**
      * @param $name
      * @return bool
-     * @description Check if the category name already exist
+     * @description Check if the category name already exist.
      */
     public static function nameExists($name): bool
     {
@@ -176,6 +176,10 @@ class CategoryModel
         return true;
     }
 
+    /**
+     * @return array
+     * @description gets all tickets marked as important from the category.
+     */
     public function getImportantTickets(): array
     {
         $pdo = DatabaseConnection::connect();
@@ -189,6 +193,11 @@ class CategoryModel
         }
         return $tickets;
     }
+
+    /**
+     * @return array
+     * @description gets all tickets from the category.
+     */
     public function getTickets(): array
     {
         $pdo = DatabaseConnection::connect();
@@ -206,7 +215,7 @@ class CategoryModel
     /**
      * @param $like
      * @return array
-     * @description Get all the categories that have $like in their name from the database
+     * @description Get all the categories that have $like in their name from the database.
      */
     public static function getAllCategoriesLike($like): array
     {
@@ -222,6 +231,10 @@ class CategoryModel
         return $categories;
     }
 
+    /**
+     * @return array
+     * @description get all the categories from the database.
+     */
     public static function getAllcategories(): array
     {
         $pdo = DatabaseConnection::connect();
@@ -235,6 +248,10 @@ class CategoryModel
         return $categories;
     }
 
+    /**
+     * @param $name
+     * @return mixed
+     */
     public static function getCategoryIdByName($name)
     {
         $pdo = DatabaseConnection::connect();

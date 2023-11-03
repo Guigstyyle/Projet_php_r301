@@ -74,7 +74,7 @@ class UserModel
      * @param $mail
      * @param $password
      * @param $frontname
-     * @description Constructor used on registration of a new user when frontname is provided
+     * @description Constructor used on registration of a new user when frontname is provided.
      */
     public function __construct4($username, $mail, $password, $frontname)
     {
@@ -105,7 +105,7 @@ class UserModel
      * @param $usernameOrMail
      * @return void
      * @throws Exception
-     * @description set the attribute by using the username in a database request
+     * @description set the attribute by using the username in a database request.
      */
     public function constructUserByUsername($usernameOrMail): void
     {
@@ -128,7 +128,7 @@ class UserModel
 
     /**
      * @return bool
-     * @description registers a new user to the database
+     * @description registers a new user to the database.
      */
     public function registerUserToDatabase(): bool
     {
@@ -220,6 +220,10 @@ class UserModel
         return $this->deactivated;
     }
 
+    /**
+     * @return array
+     * @description gets all the mentions of the user in tickets.
+     */
     public function getTicketsMentions(): array
     {
         $pdo = DatabaseConnection::connect();
@@ -234,6 +238,10 @@ class UserModel
         return $tickets;
     }
 
+    /**
+     * @return array
+     * @description gets all the mentions of the user in comments.
+     */
     public function getCommentsMentions(): array
     {
         $pdo = DatabaseConnection::connect();
@@ -288,9 +296,14 @@ class UserModel
         $query->execute();
     }
 
+    /**
+     * @param $password
+     * @return void
+     * @description takes a clear password, hashes it, sets it as the new password attribute, and updates the database.
+     */
     public function setPassword($password)
     {
-        $this->password = $password;
+        $this->password = password_hash($password, PASSWORD_BCRYPT);
         $pdo = DatabaseConnection::connect();
         $query = $pdo->prepare('UPDATE USER SET password = :newpassword WHERE username = :username');
         $query->bindValue(':newpassword', password_hash($password, PASSWORD_BCRYPT));
@@ -300,7 +313,7 @@ class UserModel
 
     /**
      * @return bool
-     * @description Change the privilege of the user and update the database
+     * @description Change the privilege of the user and update the database.
      */
     public function changeAdminState(): bool
     {
@@ -318,7 +331,7 @@ class UserModel
 
     /**
      * @return bool
-     * @description deactivate or reactivate an account an update the database
+     * @description deactivate or reactivate an account an update the database.
      */
     public function changeAccountState(): bool
     {

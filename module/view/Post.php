@@ -5,65 +5,12 @@ class Post
     public function setContent($ticket, $searchedComment): string
     {
         $id = $ticket->getIdTicket();
-        $title = $ticket->getTitle();
-        $date = date('d/m/Y H\hi', strtotime($ticket->getDate()));
-        if ($username = $ticket->getUsername()) {
-            $frontname = $ticket->getFrontnameByUsername($username);
-        } else {
-            $frontname = 'Compte supprimé';
-        }
-        $message = $ticket->getMessage();
-        $requestCategories = $ticket->getCategories();
-        $categories = '<ul class="added">';
-        if (isset($requestCategories)) {
-            foreach ($requestCategories as $category) {
-                $categories .= '<li>' . $category->getName() . '</li>';
-            }
-        }
-        $categories .= '</ul>';
-        $requestMentions = $ticket->getMentions();
-        $mentions = '<ul class="added">';
-        if (isset($requestMentions)) {
-            foreach ($requestMentions as $mention) {
-                $mentions .= '<li>' . $mention . '</li>';
-            }
-        }
-        $mentions .= '</ul>';
         $comments = $ticket->getComments();
         $importantComments = $ticket->getImportantComments();
 
-        $content = '<section class="postItems">';
 
-        $content .=
-            '<small>' . $frontname . ' - ' . $date . '</small>
-<p id="ticketTitle">' . $title . '</p>
+        $content = (new PostItemsLayout())->ticket($ticket);
 
-<p class="message">' . $message . '</p> 
-
-
-<small class="listName">Mentions :</small>
-' . $mentions . '
-
-<small class="listName">Catégories :</small>
-' . $categories;
-
-
-        if (isset($_SESSION['suid']) and $_SESSION['user']->getDeactivated() === 0) {
-            if ($username === $_SESSION['user']->getUsername()) {
-                $content .= '<form method="post" action="index.php">
-    <input type="hidden" name="idticket" value="' . $id . '">
-    <button type="submit" name="action" value="toModifyTicket">Modifier</button>';
-                $content .= '<button type="submit" name="action" value="deleteTicket">Supprimer</button> 
-</form>';
-            } elseif ($_SESSION['user']->getAdministrator() === 1) {
-                $content .= '<form method="post" action="index.php">
-    <input type="hidden" name="idticket" value="' . $id . '">';
-                $content .= '<button type="submit" name="action" value="deleteTicket">Supprimer</button> 
-</form>';
-            }
-
-        }
-        $content .= '</section>';
         if (isset($_SESSION['suid'])) {
             $content .= '
 <form class="userForm" method="post" action="index.php">
@@ -101,15 +48,20 @@ class Post
             $content .= '
 </ul></section>';
         }
-        $content .= '
+
+
+        if (!empty($importantComments)) {
+            $content .= '
 <section class="commentList"><h2>Commentaires importants</h2>
 <ul>';
-
-        foreach ($importantComments as $comment) {
-            $content .= (new PostItemsLayout())->commentUnderTicket($comment);
+            foreach ($importantComments as $comment) {
+                $content .= (new PostItemsLayout())->commentUnderTicket($comment);
+            }
+            $content .= '</ul>
+</section>';
         }
-        $content .= '</ul>
-</section>
+
+        $content .= '
 <section class="commentList"><h2>Commentaires</h2>
 <ul>';
 

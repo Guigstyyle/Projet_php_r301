@@ -14,7 +14,7 @@ if (isset($_GET['query'])) {
         $suggestions .= '
 <li>
     <input type="hidden" name="idcategory" value="'.$result["idcategory"].'">
-    <button type="submit" name="action" value="showCategory">'.$result["name"].'</button>
+    <button type="submit" name="action" value="showCategory">'.htmlspecialchars($result["name"]).'</button>
 </li>';
     }
     $suggestions .='</ul>';
@@ -28,7 +28,7 @@ if (isset($_GET['query'])) {
         $suggestions .= '
 <li>
     <input type="hidden" name="idticket" value="'.$result["idticket"].'">
-    <button type="submit" name="action" value="showTicket">'.$result["title"].'</button>
+    <button type="submit" name="action" value="showTicket">'.htmlspecialchars($result["title"]).'</button>
 </li>';
     }
     $suggestions .='</ul>';
@@ -39,10 +39,11 @@ if (isset($_GET['query'])) {
 
     $suggestions .='<ul> Commentaires :';
     while ($result = $query->fetch(PDO::FETCH_ASSOC)){
+        $text = (strlen($result["text"]) < 48) ? $result["text"] : substr($result["text"],0,47).'...';
         $suggestions .= '
 <li>
     <input type="hidden" name="idcomment" value="'.$result["idcomment"].'">
-    <button type="submit" name="action" value="showComment">'.$result["text"].'</button>
+    <button type="submit" name="action" value="showComment">'.htmlspecialchars($text).'</button>
 </li>';
 
     }

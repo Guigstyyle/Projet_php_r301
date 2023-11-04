@@ -19,10 +19,10 @@ class EditTicket
 <form class="userForm" method="post" action="index.php">
     <input type="hidden" name="idTicket" value="' . $id . '">
     <label for="title">Titre</label>
-    <input id="title" type="text" name="title" placeholder="Nom" value="' . $title . '" maxlength="100">
+    <input id="title" type="text" name="title" placeholder="Nom" value="' . htmlspecialchars($title) . '" maxlength="100">
     
     <label for="message">Message</label>
-    <textarea id="message" name="message" placeholder="Message" maxlength="3000">' . $message . '</textarea>
+    <textarea id="message" name="message" placeholder="Message" maxlength="3000">' . htmlspecialchars($message) . '</textarea>
    
     <label for="userSearch">Mentions:</label>
     <input class="searchBar" id="userSearch" type="search" name="user" placeholder="Utilisateur" autocomplete="off">
@@ -48,7 +48,7 @@ class EditTicket
     <ul class="added" id="addedCategories">
     ';
         foreach ($categories as $category) {
-            $content .= '<li>' . $category->getName() . '<input type="hidden" name="selectedCategories[]" value="' . $category->getName() . '"></li>';
+            $content .= '<li>' . htmlspecialchars($category->getName()) . '<input type="hidden" name="selectedCategories[]" value="' . htmlspecialchars($category->getName()) . '"></li>';
         }
 
         $content .= '

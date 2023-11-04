@@ -141,7 +141,7 @@ class PostController
      */
     public function deleteTicket(): bool
     {
-        $ticket = $_POST['idticket'];
+        $ticket = new TicketModel($_POST['idticket']);
         try {
             if (!$this->verifyAuthor($ticket)) {
                 throw new Exception('Vous ne pouvez pas supprimer les commentaires des autres.');

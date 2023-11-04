@@ -114,18 +114,25 @@ form.nav a {
 }
 #suggestionsAll{
     padding: 0;
+
 }
 #suggestionsAll ul {
     padding: 0;
+    width: 100%;
     list-style-type: none;
     margin: 0 0 10px;
 }
-#suggestionsAll ul button{
+#suggestionsAll ul li button{
+
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    word-break: break-word;
     padding: 10px;
     margin: 0;
     width: 100%;
     box-sizing: border-box;
 }
+
 
 .suggestions{
     display: none;
@@ -160,6 +167,12 @@ form.nav a {
     list-style-type: none;
     max-height: 500px;
     overflow-y: auto;
+}
+.searchBar:focus ~ .added, .searchBar:hover ~ .added, .suggestions:hover ~ .added{
+    display: flex;
+}
+.searchBar, textarea{
+    background-color: rgba(248, 248, 255, 0.68);
 }
 .suggestions button{
     padding: 0;
@@ -211,7 +224,7 @@ form.nav a {
     border-style: solid;
     border-width: 0.1rem;
     background-color: RGBa(0, 0, 0, 0.1);
-    margin: 10px;
+    margin: 10px 0;
     padding: 5px;
 }
 .postItems form{
@@ -333,7 +346,7 @@ hr {
 .userForm{
     background-color: RGBa(150,150,150,0.1);
     width: 100%;
-    margin: 10px;
+    margin: 10px 0;
     border-width: 0.1rem;
     border-color: cyan;
     border-style: solid;

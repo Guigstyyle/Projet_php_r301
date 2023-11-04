@@ -119,6 +119,7 @@ class TicketModel
         $this->message = $message;
         $this->date = date('Y-m-d H:i:s');
         $this->username = $username;
+        $this->important = $important;
         $pdo = DatabaseConnection::connect();
         $query = $pdo->prepare('INSERT INTO TICKET (title,message,date,username,important) VALUES (:title,:message,:date,:username,:important)');
         $query->bindValue(':title', $title);

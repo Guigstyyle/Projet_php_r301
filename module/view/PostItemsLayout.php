@@ -30,7 +30,7 @@ class PostItemsLayout
         $categories = '<ul class="added">';
         if (isset($requestCategories)) {
             foreach ($requestCategories as $category) {
-                $categories .= '<li>' . $category->getName() . '</li>';
+                $categories .= '<li>' .  htmlspecialchars($category->getName()) . '</li>';
             }
         }
         $categories .= '</ul>';
@@ -50,13 +50,13 @@ class PostItemsLayout
         }
 
         $content .=
-            '<small>' . $frontname . ' - ' . $date . '</small>
-<p class="ticketTitle">' . $title . '</p>
-<p class="message">' . $message . '</p> 
+            '<small>' . htmlspecialchars($frontname) . ' - ' . $date . '</small>
+<p class="ticketTitle">' . htmlspecialchars($title) . '</p>
+<p class="message">' . htmlspecialchars($message) . '</p> 
 <small class="listName">Mentions :</small>
             ' . $mentions . '
 <small class="listName">Catégories :</small>
-            ' . $categories . '
+            ' .  $categories . '
                 <form method="post" action="index.php">
     <button type="submit" name="action" value="showTicket">Voir</button>
     <input type="hidden" name="idticket" value="' . $id . '">';
@@ -96,8 +96,8 @@ class PostItemsLayout
 
         $content = '
             <li class="postItems">
-                <p class="ticketTitle">' . $name . '</p>
-                <p class="message">' . $description . '</p>
+                <p class="ticketTitle">' . htmlspecialchars($name) . '</p>
+                <p class="message">' . htmlspecialchars($description) . '</p>
                     <form method="post" action="index.php">
                         <input type="hidden" name="idcategory" value="' . $id . '">
                         <button type="submit" name="action" value="showCategory">Voir</button>';
@@ -135,9 +135,9 @@ class PostItemsLayout
         }
 
 
-        $content .= $comment->getFrontnameByUsername() . ' :' . PHP_EOL . '
+        $content .=  htmlspecialchars($comment->getFrontnameByUsername()) . ' :' . PHP_EOL . '
  <small>' . date('d/m/Y H\hi', strtotime($comment->getDate())) . '</small>
-<p class="message">' . $text . '</p>
+<p class="message">' . htmlspecialchars($text) . '</p>
 <small class="listName">Mentions :</small>
 <ul class="added addedUsers">';
         foreach ($comment->getMentions() as $mention) {
@@ -195,7 +195,7 @@ class PostItemsLayout
         <input type="hidden" name="username" value="' . $username . '">
         <li>Username :' . $username . '</li>
         <li>Mail :' . $mail . '</li>
-        <li>Frontname :' . $frontname . '</li>
+        <li>Frontname :' . htmlspecialchars($frontname) . '</li>
         <li>Première connexion :' . $firstconnection . '</li>
         <li>Dernière connexion :' . $lastconnection . '</li>
         <li>Administrateur :' . $isAdmin . '<button type="submit" name="action" value="changeAdminState">' . $adminOrNot . '</button></li>
@@ -209,11 +209,11 @@ class PostItemsLayout
 
     /**
      * @param $comment
-     * @param $isSearched
+     * @param int $isSearched
      * @return string
      * @description to render comment under tickets.
      */
-    public function commentUnderTicket($comment, $isSearched = 0): string
+    public function commentUnderTicket($comment, int $isSearched = 0): string
     {
         if ($isSearched) {
             if ($comment->getImportant()) {
@@ -234,9 +234,9 @@ class PostItemsLayout
         }
 
 
-        $content .= $comment->getFrontnameByUsername() . ' :' . PHP_EOL . '
+        $content .= htmlspecialchars($comment->getFrontnameByUsername()) . ' :' . PHP_EOL . '
  <small>' . date('d/m/Y H\hi', strtotime($comment->getDate())) . '</small>
-<p class="message">' . $comment->getText() . '</p>
+<p class="message">' . htmlspecialchars($comment->getText()) . '</p>
 
 <ul class="suggestions userSuggestions">
 
@@ -244,7 +244,7 @@ class PostItemsLayout
 <small class="listName">Mentions :</small>
 <ul class="added addedUsers">';
         foreach ($comment->getMentions() as $mention) {
-            $content .= '<li>' . $mention . '<input type="hidden" name="selectedUsers[]" value="' . $mention . '"></li>';
+            $content .= '<li>' . htmlspecialchars($mention) . '<input type="hidden" name="selectedUsers[]" value="' . $mention . '"></li>';
         }
         $content .= '</ul>';
         if (isset($_SESSION['suid']) and

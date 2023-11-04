@@ -74,6 +74,9 @@ class RegisterController
             if (!$this->validatePasswordRegex($_POST['password'])) {
                 throw new \Exception('Le mot de passe doit contenir 8 caractères dont :<br>' . PHP_EOL . '      -Une majuscule<br>' . PHP_EOL . '     -Une minuscule<br>' . PHP_EOL . '      -Un chiffre<br>' . PHP_EOL . '     -Un caractère spécial');
             }
+            if (!$this->validateUsernameRegex($_POST['username'])){
+                throw  new Exception('Le nom d\'utilisateur ne peu contenir que des lettres, des chiffres aisni que les caractères suivant : ._*-~@#');
+            }
             if (!$this->doubleCheckPassword($_POST['password'], $_POST['verifPassword'])) {
                 throw new \Exception('Les mots de passe ne correspondent pas.');
             }
@@ -99,6 +102,11 @@ class RegisterController
     {
         $password_regex = "/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/";
         return (preg_match($password_regex, $password));
+    }
+    public function validateUsernameRegex($username): bool
+    {
+        $usernameRegex = "/^[a-zA-Z0-9._*\-~@#]*$/";
+        return (preg_match($usernameRegex, $username));
     }
 
     /**

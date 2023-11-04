@@ -11,7 +11,7 @@ if (isset($_GET['query'])) {
 
     $suggestions ='';
     while ($result = $query->fetch(PDO::FETCH_ASSOC)){
-        $suggestions .= '<li>'.$result['username'].' ('.$result['frontname'].')'.'</li>';
+        $suggestions .= '<li>'.$result['username'].' ('.htmlspecialchars($result['frontname']).')'.'</li>';
     }
     echo $suggestions;
 }

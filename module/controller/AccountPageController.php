@@ -57,7 +57,7 @@ class AccountPageController
     /**
      * @param $user
      * @return bool
-     * @todo Verify username input for special characters and all input for len limit
+     * @todo Verify all input for len limit
      */
     public function validateChangeInformationsForm($user): bool
     {
@@ -71,10 +71,12 @@ class AccountPageController
             }
             $username = $_POST['username'];
             $mail = $_POST['mail'];
+            if (!$this->validateUsernameRegex($_POST['username'])) {
+                throw  new Exception('Le nom d\'utilisateur ne peu contenir que des lettres, des chiffres aisni que les caractères suivant : ._*-~@#');
+            }
 
             if ($username !== $user->getUsername()) {
                 if (UserModel::usernameExists($username)) {
-
                     throw new Exception('Le username existe déjà.');
                 }
             }
@@ -120,6 +122,7 @@ class AccountPageController
             if (!$this->validatePasswordRegex($newPassword)) {
                 throw new Exception('Le mot de passe doit contenir 8 caractères dont :<br>' . PHP_EOL . '      -Une majuscule<br>' . PHP_EOL . '     -Une minuscule<br>' . PHP_EOL . '      -Un chiffre<br>' . PHP_EOL . '     -Un caractère spécial');
             }
+
             if (!UserModel::verifyPassword($user->getUsername(), $password)) {
                 throw new Exception('Mot de passe incorrect.');
             }
@@ -132,6 +135,12 @@ class AccountPageController
             return false;
         }
 
+    }
+
+    public function validateUsernameRegex($username): bool
+    {
+        $usernameRegex = "/^[a-zA-Z0-9._*\-~@#]*$/";
+        return (preg_match($usernameRegex, $username));
     }
 
     public function validatePasswordRegex($password): bool

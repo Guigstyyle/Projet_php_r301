@@ -8,7 +8,7 @@ class Layout
     public function __construct(string $title, string $content)
     {
         $this->content = $content;
-        $this->title = $title;
+        $this->title = htmlspecialchars($title);
     }
 
     public function show(): void

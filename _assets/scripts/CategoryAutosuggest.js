@@ -13,9 +13,18 @@ $(document).ready(function () {
 });
 $('#categorySuggestions').on('click','li', function(){
     if ($('#addedCategories li:contains(' + $(this).text() + ')').length === 0){
-        $('#addedCategories').append('<li>'+$(this).text()+'<input type="hidden" name="selectedCategories[]" value="'+$(this).text()+'"></li>');
+        $('#addedCategories').append('<li>'+ escapeHtml($(this).text()) +'<input type="hidden" name="selectedCategories[]" value="'+escapeHtml($(this).text())+'"></li>');
     }
 });
 $('#addedCategories').on('click','li', function(){
     $(this).remove();
 });
+
+function escapeHtml(text) {
+    return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}

@@ -91,7 +91,7 @@ class Layout
         <footer>
             <hr/>
             <h3>Contact</h3>
-            <p>Pour nous contacter veuiller ecrire un mail a l'addresse mail suivante : wang-m@alwaysdata.net</p>
+            <p>Pour nous contacter, veuillez ecrire un mail à l'addresse mail suivante : wang-m@alwaysdata.net</p>
         </footer>
         <script src="/_assets/lib/http_ajax.googleapis.com_ajax_libs_jquery_2.1.1_jquery.js"></script>
         <script src="/_assets/scripts/AllAutosuggest.js"></script>

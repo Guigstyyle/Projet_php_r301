@@ -29,7 +29,7 @@ class ForgotPasswordController
             $user = new UserModel($mail);
             $user->setPassword($password);
 
-            $from = 'postmaster@localhost.net';
+            $from = 'noreply@wang-m.alwaysdata.net';
             $message = 'Voici votre nouveau mot de passe, changez le dès que possile :' . PHP_EOL;
             $message .= 'Mot de passe : ' . $password . PHP_EOL;
             mail($mail, 'Inscription', $message, 'From:' . $from);

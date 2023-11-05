@@ -374,7 +374,7 @@ hr {
     border-style: solid;
     border-color: cyan;
     background-color: RGBa(0, 0, 0, 0.1);
-    margin: 10px;
+    margin: 10px 0;
     padding: 10px;
 }
 .comment p{

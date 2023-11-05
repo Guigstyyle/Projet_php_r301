@@ -56,7 +56,7 @@ class Layout
 
                 <?php if (isset($_SESSION['suid'])) {
 
-                    echo '<li><button type="submit" name="action" value="logout">Logout</button></li>';
+                    echo '<li><button type="submit" name="action" value="logout">Déconnexion</button></li>';
                     if ($_SESSION['user']->getDeactivated() === 0) {
                         echo '<li><button type="submit" name="action" value="toPost">Poster</button></li>';
                     }
@@ -71,7 +71,7 @@ class Layout
                     <li class="deroulant"><a href="#">Compte ▼</a>
                         <ul class="sous">
                             <li>
-                                <button class="button" type="submit" name="action" value="toLogin">Login</button>
+                                <button class="button" type="submit" name="action" value="toLogin">Connexion</button>
                             </li>
                             <li>
                                 <button class="button" type="submit" name="action" value="toRegister">Créer un compte

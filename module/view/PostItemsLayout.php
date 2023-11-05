@@ -105,6 +105,7 @@ class PostItemsLayout
             $_SESSION['user']->getAdministrator() === 1 and
             $_SESSION['user']->getDeactivated() === 0) {
             $content .= '<button type="submit" name="action" value="toModifyCategory">Modifier</button>';
+            $content .= '<button type="submit" name="action" value="deleteCategory">Supprimer</button>';
         }
         $content .= '</form>
 </li>';

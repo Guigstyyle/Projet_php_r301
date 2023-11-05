@@ -56,6 +56,6 @@ HTML;
             session_start();
         }
         $user = $_SESSION['user'];
-        (new Layout('compte de ' . $user->getUsername(), $this->setContent($user)))->show();
+        (new Layout('Compte de ' . $user->getUsername(), $this->setContent($user)))->show();
     }
 }

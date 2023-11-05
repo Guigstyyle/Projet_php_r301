@@ -201,7 +201,7 @@ class CategoryModel
     public function getTickets(): array
     {
         $pdo = DatabaseConnection::connect();
-        $query = $pdo->prepare('SELECT idticket FROM TICKETCATEGORY WHERE idcategory = :idCategory');
+        $query = $pdo->prepare('SELECT TICKET.idticket FROM TICKETCATEGORY TC JOIN TICKET ON TC.idticket = TICKET.idticket WHERE TC.idcategory = :idCategory ORDER BY date DESC');
         $query->bindValue(':idCategory', $this->idCategory);
         $query->execute();
 

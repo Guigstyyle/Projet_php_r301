@@ -27,7 +27,7 @@ class Layout
                 charset="UTF-8"
                 name="description"
                 content="Ceci est la page d'accueil de notre site sous forme de mur social de type blog."/>
-            <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
+            <link rel="icon" href="favicon.ico" type="image/x-icon"/>
             <link rel="stylesheet" type="text/css" href="_assets/styles/style.css">
         </head>
         <body>

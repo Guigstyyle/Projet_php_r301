@@ -143,7 +143,7 @@ class PostController
     {
         $ticket = new TicketModel($_POST['idticket']);
         try {
-            if (!$this->verifyAuthor($ticket) && $_SESSION['user']->getAdministrator() === 0) {
+            if ((!$this->verifyAuthor($ticket)) && ($_SESSION['user']->getAdministrator() === 0)) {
                 throw new Exception('Vous ne pouvez pas supprimer les billets des autres.');
             }
             TicketModel::deleteTicket($_POST['idticket']);

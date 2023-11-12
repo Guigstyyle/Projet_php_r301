@@ -140,7 +140,7 @@ class CommentController
     private function deleteComment(): bool
     {
         try {
-            if (!$this->verifyAuthor(new CommentModel($_POST['idcomment']))) {
+            if (!$this->verifyAuthor(new CommentModel($_POST['idcomment'])) && $_SESSION['user']->getAdministrator() === 0) {
                 throw new Exception('Vous ne pouvez pas supprimer les commentaires des autres');
             }
             CommentModel::deleteComment($_POST['idcomment']);
